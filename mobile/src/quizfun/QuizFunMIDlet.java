@@ -141,6 +141,10 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      */
     private Command hintCommand;
     /**
+     * Show Game Settings <code>Command</code>
+     */
+    private Command gameSettingsCommand;
+    /**
      * Select Module <code>Form</code>
      */
     private Form moduleForm;
@@ -148,6 +152,10 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      * Select Game <code>Form</code>
      */
     private Form gameForm;
+    /**
+     * Select Game Settings <code>Form</code>
+     */
+    private Form gameSettingsForm;
     /**
      * Single player mode. Used in server post data.
      */
@@ -160,6 +168,10 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      * Game ID input <code>TextField</code>
      */
     private TextField gameTextField;
+    /**
+     * QuizFun server url input <code>TextField</code>
+     */
+    private TextField serverUrlTextField;
     /**
      * Question list. Assuming 5 questions per level
      */
@@ -214,8 +226,33 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      * Check whether game is over.
      */
     private boolean gameOver;
+    /**
+     * Server Url of the QuizFun server
+     */
+    private String serverUrl;
 
     private void initialize() {
+        serverUrl = getServerUrl();
+    }
+
+    private String getServerUrl() {
+        String serverUrlValue = null;
+        try {
+            // Try to load the server URL from record store.
+            // User will not have to type the username again
+            RecordStore settings = RecordStore.openRecordStore("QuizFun", true);
+            serverUrlValue = new String(settings.getRecord(1));
+            settings.closeRecordStore();
+        // No settings file existed
+        } catch (Exception ex) {
+            logException(ex);
+        }
+
+        // Get the base server url for app property.
+        if (serverUrlValue == null) {
+            serverUrlValue = getAppProperty("QuizFun-Server-URL");
+        }
+        return serverUrlValue;
     }
 
     /**
@@ -452,6 +489,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
                 successDisplayable = getMenu();
                 failureDisplayable = loginForm;
                 switchDisplayable(null, screen);
+            } else if (command == gameSettingsCommand) {
+                switchDisplayable(null, getGameSettingsForm());
             }
         } else if (displayable == splashScreen) {
             if (command == SplashScreen.DISMISS_COMMAND) {
@@ -465,6 +504,21 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             } else if (command == WaitScreen.SUCCESS_COMMAND) {
                 // Switch the display to successDisplayable set before executing the task
                 switchDisplayable(getAlertSuccess(), successDisplayable);
+            }
+        } else if (displayable == gameSettingsForm) {
+            if (command == backCommand) {
+                // Go back to login
+                switchDisplayable(null, getLoginForm());
+            } else if (command == doneCommand) {
+                String serverUrlInput = serverUrlTextField.getString();
+                if (serverUrlInput == null || serverUrlInput.trim().length() == 0) {
+                    getAlertFailure().setString("Please enter server url.");
+                    switchDisplayable(getAlertFailure(), gameSettingsForm);
+                } else {
+                    this.serverUrl = serverUrlInput;
+                    // Go back to menu
+                    switchDisplayable(null, getLoginForm());
+                }
             }
         }
     }
@@ -617,8 +671,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             try {
                 // Try to load the username from record store.
                 // User will not have to type the username again
-                RecordStore settings = RecordStore.openRecordStore("QuizFun", true);
-                username = new String(settings.getRecord(1));
+                RecordStore settings = RecordStore.openRecordStore("QuizFun", false);
+                username = new String(settings.getRecord(2));
                 settings.closeRecordStore();
             // No settings file existed
             } catch (Exception ex) {
@@ -631,6 +685,7 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             loginForm.append(passwordTextField);
             loginForm.addCommand(getExitCommand());
             loginForm.addCommand(getLoginCommand());
+            loginForm.addCommand(getGameSettingsCommand());
             loginForm.setCommandListener(this);
         }
         return loginForm;
@@ -893,7 +948,7 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             try {
                 // Try to load the module code from record store.
                 RecordStore settings = RecordStore.openRecordStore("QuizFun", true);
-                moduleCode = new String(settings.getRecord(2));
+                moduleCode = new String(settings.getRecord(3));
                 settings.closeRecordStore();
             // No settings file existed
             } catch (Exception ex) {
@@ -925,6 +980,32 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             questionForm.setCommandListener(this);
         }
         return questionForm;
+    }
+
+    /**
+     * Get the game settings form
+     */
+    public Form getGameSettingsForm() {
+        if (gameSettingsForm == null) {
+            gameSettingsForm = new Form("Settings");
+            serverUrlTextField = new TextField("Server Url:", serverUrl, 255, TextField.URL);
+            gameSettingsForm.append(serverUrlTextField);
+            gameSettingsForm.addCommand(getBackCommand());
+            gameSettingsForm.addCommand(getDoneCommand());
+            gameSettingsForm.setCommandListener(this);
+        }
+        return gameSettingsForm;
+    }
+
+    /**
+     * Returns an initialized instance of gameSettingsCommand component.
+     * @return the initialized component instance
+     */
+    public Command getGameSettingsCommand() {
+        if (gameSettingsCommand == null) {
+            gameSettingsCommand = new Command("Settings", Command.OK, 10);
+        }
+        return gameSettingsCommand;
     }
 
     /**
@@ -1003,7 +1084,7 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
 
                 String username = usernameTextField.getString();
                 if (username == null) {
-                    return;
+                    username = ""; // Store empty string
                 }
 
                 String moduleCode = null;
@@ -1011,12 +1092,23 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
                     moduleCode = moduleTextField.getString();
                 }
 
+                if (username == null) {
+                    username = ""; // Store empty string
+                }
+
                 try {
                     // Save the values in record store.
                     RecordStore settings = RecordStore.openRecordStore("QuizFun", true);
 
                     try {
-                        settings.setRecord(1, username.getBytes(), 0, username.length());
+                        settings.setRecord(1, serverUrl.getBytes(), 0, serverUrl.length());
+                    // First time writing to the settings file
+                    } catch (RecordStoreException rse) {
+                        settings.addRecord(serverUrl.getBytes(), 0, serverUrl.length());
+                    }
+
+                    try {
+                        settings.setRecord(2, username.getBytes(), 0, username.length());
                     // First time writing to the settings file
                     } catch (RecordStoreException rse) {
                         settings.addRecord(username.getBytes(), 0, username.length());
@@ -1024,7 +1116,7 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
 
                     if (moduleCode != null) {
                         try {
-                            settings.setRecord(2, moduleCode.getBytes(), 0, moduleCode.length());
+                            settings.setRecord(3, moduleCode.getBytes(), 0, moduleCode.length());
                         // First time writing to the settings file
                         } catch (RecordStoreException rse) {
                             settings.addRecord(moduleCode.getBytes(), 0, moduleCode.length());
@@ -1048,10 +1140,6 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      */
     abstract class AbstractExecutable implements Executable {
 
-        //private final String baseUrl = "http://localhost:8080/QuizFun/m/";
-
-        // Get the base server url for app property.
-        private final String baseUrl = getAppProperty("QuizFun-Server-URL");
         /**
          * User agent type
          */
@@ -1066,7 +1154,7 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
                 // Call init
                 init();
                 // Construct the URL to connect
-                String url = baseUrl + getURL();
+                String url = serverUrl + getURL();
                 System.out.println("Connecting to " + url);
                 HttpConnection hc = (HttpConnection) Connector.open(url);
                 hc.setRequestMethod(HttpConnection.POST);
