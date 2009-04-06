@@ -100,6 +100,18 @@ div.clearer {
 	margin: 2px;
 }
 
+.iceSelInpTxt-rdoList {
+	display: none;
+}
+
+/*Style for non-editable components.*/
+.iceInpTxt-rdo, .iceSelInpTxt-rdoTxt, .iceInpTxtArea-rdo, .iceSelOneMnu-dis {
+	background-color: #F0F8FF;
+	background-image: none;
+	color: #00008B;
+	cursor: default;
+}
+
 /* Error Styles - Start */
 #msgsGlobal {
 	background-color: #E6F3FB; /*#FFFFCE*/
