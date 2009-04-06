@@ -50,8 +50,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				<!-- Home -->
 				<ice:menuItem id="mitHome" value="#{res['menu.home.label']}" action="home" immediate="true" />
 	
-				<!-- Reference Data renderedOnUserRole="ROLE_LECTURER" -->
-				<ice:menuItem id="mitRefData" value="#{res['menu.reference.label']}" >
+				<!-- Reference Data -->
+				<ice:menuItem id="mitRefData" value="#{res['menu.reference.label']}" renderedOnUserRole="ROLE_LECTURER">
 					<ice:menuItem id="mitCourse" value="#{res['menu.course.label']}" action="searchCourse" immediate="true">
 						<ice:menuItem id="mitSearchCourse" value="#{res['menu.search.label']}" action="searchCourse" immediate="true" />
 						<ice:menuItem id="mitCreateCourse" value="#{res['menu.create.label']}" action="createCourse" immediate="true" />
@@ -75,8 +75,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</ice:menuItem>	
 				 -->
 				
-				<!-- Administration renderedOnUserRole="ROLE_ADMIN" -->
-				<ice:menuItem id="mitAdmin" value="#{res['menu.administration.label']}" >
+				<!-- Administration -->
+				<ice:menuItem id="mitAdmin" value="#{res['menu.administration.label']}" renderedOnUserRole="ROLE_ADMIN">
 					<ice:menuItem id="mitUser" value="#{res['menu.user.label']}" action="searchUser" immediate="true">
 						<ice:menuItem id="mitSearchUser" value="#{res['menu.search.label']}" action="searchUser" immediate="true" />
 						<ice:menuItem id="mitCreateUser" value="#{res['menu.create.label']}" action="createUser" immediate="true" />

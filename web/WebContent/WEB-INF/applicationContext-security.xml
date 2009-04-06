@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<intercept-url pattern="/xmlhttp/**" access="ROLE_ANONYMOUS,ROLE_USER" requires-channel="https" />
 		<intercept-url pattern="/block/**" access="ROLE_ANONYMOUS,ROLE_USER" requires-channel="https" />
 		<intercept-url pattern="/m/**" access="ROLE_ANONYMOUS" requires-channel="http" />
-		<intercept-url pattern="/about**" access="ROLE_ANONYMOUS" />
+		<intercept-url pattern="/about**" access="ROLE_ANONYMOUS,ROLE_USER" />
 		<intercept-url pattern="/login.iface*" access="ROLE_ANONYMOUS" requires-channel="https" />
 		<intercept-url pattern="/**" access="ROLE_USER" requires-channel="https" />
 		<anonymous username="guest" />
