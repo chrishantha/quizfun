@@ -77,7 +77,7 @@ public class SearchQuestionManagedBean extends QuestionManagedBean{
 
 			@Override
 			public void getFilterStrings(List<String> baseList, Question question) {
-				baseList.add(String.valueOf(question.getId()));
+				//baseList.add(String.valueOf(question.getId()));
 				baseList.add(question.getQuestion());
 				baseList.add(question.getModule().getCode());
 				baseList.add(question.getModule().getName());

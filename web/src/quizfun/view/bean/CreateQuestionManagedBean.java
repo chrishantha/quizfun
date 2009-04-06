@@ -58,7 +58,7 @@ public class CreateQuestionManagedBean extends QuestionManagedBean{
 		}
 		try {
 			question.setModule(module);
-			for (Answer answer : question.getAnswers()) {
+			for (Answer answer : answerList) {
 				answer.setQuestion(question);
 			}
 			for (Answer answer : answerList) {
@@ -67,6 +67,7 @@ public class CreateQuestionManagedBean extends QuestionManagedBean{
 			serviceLocator.getQuestionService().saveQuestion(question);
 			super.clearValues();
 			clearValues();
+			// Don't focus. There is an issue with ICEfaces.
 			ICEfacesUtils.setFocus(quesInputTextArea);
 			JSFUtils.addFacesInfoMessage("question.save.successful");
 		} catch (DuplicateQuestionException e) {
