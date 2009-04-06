@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.User;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -105,7 +106,7 @@ public class ModifyUserManagedBean extends UserManagedBean {
 			}
 			JSFUtils.storeOnRequestMap("user", modifyingUser);
 			JSFUtils.addFacesInfoMessage("user.save.successful");
-			userNameInputText.requestFocus();
+			ICEfacesUtils.setFocus(userNameInputText);
 		} catch (Throwable e) {
 			logger.error("Exception when saving user: " + user, e);
 			JSFUtils.addApplicationErrorMessage();

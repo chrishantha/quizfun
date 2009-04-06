@@ -19,19 +19,16 @@
 package quizfun.view.bean;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Answer;
-import quizfun.model.entity.Module;
 import quizfun.model.entity.Question;
 import quizfun.model.exception.DuplicateQuestionException;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -44,10 +41,7 @@ public class CreateQuestionManagedBean extends QuestionManagedBean{
 	@javax.annotation.PostConstruct
 	public void init() {
 		question = new Question();
-		question.setAnswers(null);
-		question.setModule(new Module());
-		answerList = new ArrayList<Answer>(0);
-//		ans = new HashSet<Answer>();
+		answerList = new ArrayList<Answer>();
 		initializeModuleSelectInput();		
 	}
 
@@ -55,30 +49,25 @@ public class CreateQuestionManagedBean extends QuestionManagedBean{
 	public void saveActionListener(ActionEvent event) {
 		if (module == null) {
 			JSFUtils.addFacesErrorMessage("question.module.required.message");
-			moduleSelectInputText.requestFocus();
-			return;
-		}
-		if (question.getAnswers() == null || question.getAnswers().isEmpty()) {
-			JSFUtils.addFacesErrorMessage("question.answers.required.message");
+			ICEfacesUtils.setFocus(moduleSelectInputText);
 			return;
 		}
 		
-		Boolean correctAns = false;
-		for (Answer a :answerList) {
-			if(a.isCorrect()) {
-				correctAns = true;
-			}
-		}
-		if (!correctAns) {
-			JSFUtils.addFacesErrorMessage("question.correctans.required.message");
-			return;			
+		if (!validateAnswers(answerList)) {
+			return;
 		}
 		try {
 			question.setModule(module);
+			for (Answer answer : question.getAnswers()) {
+				answer.setQuestion(question);
+			}
+			for (Answer answer : answerList) {
+				question.getAnswers().add(answer);
+			}
 			serviceLocator.getQuestionService().saveQuestion(question);
 			super.clearValues();
 			clearValues();
-			quesInputTextArea.requestFocus();
+			ICEfacesUtils.setFocus(quesInputTextArea);
 			JSFUtils.addFacesInfoMessage("question.save.successful");
 		} catch (DuplicateQuestionException e) {
 			JSFUtils.addFacesErrorMessage("question.save.duplicate", new Object[] { question.getId() });
@@ -88,81 +77,18 @@ public class CreateQuestionManagedBean extends QuestionManagedBean{
 			JSFUtils.addApplicationErrorMessage();
 			return;
 		}
-	}
-	
-	/**
-	 * Add an Answer
-	 */
-	public void addAnswers() {
-		logger.debug("CreateQuestionManagedBean - addAnswer");
-		
-		String answer = (String) answrInputTextArea.getValue();
-		Answer newAnswer = new Answer();
-		newAnswer.setAnswer(answer);
-		answerList.add(newAnswer);		
-//		ans.add(newAnswer);
-		question.setAnswers(new HashSet<Answer>(answerList));
-		answrInputTextArea.resetValue();
-	}
-	
-	
-	public void correctValueChangeEvent(ValueChangeEvent event) {
-		Answer correctAns = (Answer) tblAnswers.getRowData();
-		HtmlSelectBooleanCheckbox selectBooleanCheckbox = (HtmlSelectBooleanCheckbox) event.getComponent();
-		Boolean correct = false;
-		if (selectBooleanCheckbox.getValue() != null) {
-			correct = (Boolean) selectBooleanCheckbox.getValue();
-		}
-		correctAns.setCorrect(correct);
 	}	
 	
 	public void clearActionListener(ActionEvent event) {
 		super.clearActionListener(event);
-		 clearValues();
-		 answrInputTextArea.resetValue();
-		 correctSelectBooleanCheckbox.resetValue();
-		 tblAnswers.getChildren().clear();
-		 tblPanelGroup.getChildren().clear();		 
+		clearValues();
+		answerInputTextArea.resetValue();
+		tblAnswers.getChildren().clear();
+		tblPanelGroup.getChildren().clear();
 	}
 	
-	public void clearValues() {
-		question.setAnswers(new HashSet<Answer>());
-		setAnswerList(new ArrayList<Answer>());
-//		setAns(new HashSet<Answer>());
+	protected void clearValues() {
+		answerList.clear();
+		answerInput = null;
 	}
-	
-	public void editAnswerAction() {
-		this.answer = (Answer) tblAnswers.getRowData();
-		answrInputTextArea.setValue(this.answer.getAnswer());
-		updateAnswer = true;
-	}
-	
-	public void editAnswer() {
-		this.answer.setAnswer((String) answrInputTextArea.getValue());
-		answrInputTextArea.resetValue();
-		updateAnswer = false;
-	}
-
-	public void removeAnswerConfirmActionListener(ActionEvent event) {
-		this.answer = (Answer) tblAnswers.getRowData();
-		removeAnswerConfirmVisible = this.answer != null;
-		if (removeAnswerConfirmVisible) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Going to remove: {}", this.answer);
-			}
-		}
-	}
-	public void removeAnswerActionListener(ActionEvent event) {
-		if (this.answer == null) {
-			return;
-		}
-		this.answerList.remove(this.answer);
-	//	this.ans.remove(this.answer);
-		removeAnswerConfirmVisible = false;
-
-	}
-	
-	public void closeRemoveAnswerActionListener(ActionEvent event) {
-		removeAnswerConfirmVisible = false;
-	}	
 }

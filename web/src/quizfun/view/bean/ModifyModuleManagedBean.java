@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Module;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -57,7 +58,7 @@ public class ModifyModuleManagedBean extends ModuleManagedBean {
 	public void saveActionListener(ActionEvent event) {
 		if (course == null) {
 			JSFUtils.addFacesErrorMessage("selectcourse.course.required.message");
-			courseSelectInputText.requestFocus();
+			ICEfacesUtils.setFocus(courseSelectInputText);
 			return;
 		}
 		
@@ -73,7 +74,7 @@ public class ModifyModuleManagedBean extends ModuleManagedBean {
 			}
 			JSFUtils.storeOnRequestMap("module", modifyingModule);
 			JSFUtils.addFacesInfoMessage("module.save.successful");
-			codeInputText.requestFocus();
+			ICEfacesUtils.setFocus(codeInputText);
 		} catch (Throwable e) {
 			logger.error("Exception when saving module: " + module, e);
 			JSFUtils.addApplicationErrorMessage();
@@ -86,7 +87,7 @@ public class ModifyModuleManagedBean extends ModuleManagedBean {
 
 		codeInputText.resetValue();
 		nameInputText.resetValue();
-		codeInputText.requestFocus();
+		ICEfacesUtils.setFocus(codeInputText);
 		
 		selectedCourseInputText.resetValue();
 	}

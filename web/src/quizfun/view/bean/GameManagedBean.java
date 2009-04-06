@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Game;
 import quizfun.model.entity.Question;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.TextFilterator;
 import ca.odell.glazedlists.matchers.TextMatcherEditor;
@@ -80,14 +81,14 @@ public abstract class GameManagedBean extends ModuleSelectManagedBean {
 		if (filterList == null || filterList.isEmpty()) {
 			JSFUtils.addFacesInfoMessage(filterInputText, "common.filter.empty");
 		}
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	public void filterClearActionListener(ActionEvent event) {
 		filterText = null;
 		filterList();
 		filterInputText.resetValue();
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	private void filterList() {

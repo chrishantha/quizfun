@@ -28,6 +28,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import quizfun.model.dto.CourseSCDO;
 import quizfun.model.entity.Course;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -132,7 +133,7 @@ public class SearchCourseManagedBean extends CourseManagedBean {
 			} else {
 				courseMatcherEditor = new TextMatcherEditor<Course>(courseFilterator);
 				filterList = new FilterList<Course>(GlazedLists.eventList(courses), courseMatcherEditor);
-				filterInputText.requestFocus();
+				ICEfacesUtils.setFocus(filterInputText);
 			}
 		} catch (Throwable e) {
 			logger.error("Exception when finding course: " + courseSCDO, e);
@@ -146,14 +147,14 @@ public class SearchCourseManagedBean extends CourseManagedBean {
 		if (filterList == null || filterList.isEmpty()) {
 			JSFUtils.addFacesInfoMessage(filterInputText, "common.filter.empty");
 		}
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	public void filterClearActionListener(ActionEvent event) {
 		filterText = null;
 		filterList();
 		filterInputText.resetValue();
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	private void filterList() {

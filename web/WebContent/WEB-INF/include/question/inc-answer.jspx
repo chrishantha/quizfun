@@ -27,41 +27,42 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			styleClass="lblCommon">
 		</ice:outputLabel>
 		<ice:panelGroup>
-			<ice:panelGrid id="pnlConf2" width="100%" columns="2"
-				columnClasses="pnlGrdTwoColumnFormTextarea,pnlGrdTwoColumnFormButton">
-				<ice:panelGroup>
-					<ice:inputTextarea id="txtaAnswr"
-						binding="#{managedBean.answrInputTextArea}"
-						maxlength="#{res['question.answer.maxlength']}"
-						partialSubmit="true">
-					</ice:inputTextarea>
-					<ice:message for="txtaAnswr" />
-				</ice:panelGroup>
-				<!-- Command buttons -->
-				<ice:panelGroup id="pnlAnswrButton">
-					<ice:commandButton id="btnAddAnswr"
-						action="#{managedBean.addAnswers}"
-						value="#{res['common.label.add']}" 
-						immediate="true"
-						rendered="#{!managedBean.updateAnswer}"/>
-					<!-- disabled="#{managedBean.viewMode}" -->
-					 <ice:commandButton id="btnUpdateAnswer"
-						value="#{res['command.common.label.update']}"
-						rendered="#{managedBean.updateAnswer}"
-						action="#{managedBean.editAnswer}" />
-		 
-				</ice:panelGroup>
-			</ice:panelGrid>
+			<ice:inputTextarea id="txtaAnswr"
+				value="#{managedBean.answerInput}"
+				binding="#{managedBean.answerInputTextArea}"
+				partialSubmit="true">
+				<f:validateLength maximum="#{res['question.answer.maxlength']}"></f:validateLength>
+			</ice:inputTextarea>
+			<ice:message for="txtaAnswr" />
 		</ice:panelGroup>
-		</ice:panelGrid>
+		<f:verbatim></f:verbatim>
+		<!-- Command buttons -->
+		<ice:panelGroup id="pnlAnswrButton">
+			<ice:commandButton id="btnAddAnswr"
+				actionListener="#{managedBean.addAnswer}"
+				value="#{res['common.label.add']}" 
+				immediate="true"
+				rendered="#{!managedBean.updateAnswer}"/>
+			<ice:commandButton id="btnUpdateAnswer"
+				value="#{res['common.label.update']}"
+				rendered="#{managedBean.updateAnswer}"
+				actionListener="#{managedBean.editAnswer}" />
+			<ice:commandButton id="btnCancelAnswer"
+				value="#{res['common.label.cancel']}"
+				rendered="#{managedBean.updateAnswer}"
+				actionListener="#{managedBean.cancelAnswerInput}"
+				immediate="true" />
+		</ice:panelGroup>
+	</ice:panelGrid>
+<ice:outputText value="#{res['question.answer.info']}" styleClass="iceMsgInfo" style="padding: 2px 2px 2px 22px;" />
 	<ice:panelGrid id="pnlConf3" width="100%" columns="1">
 
 		<ice:panelGroup id="pngData" binding="#{managedBean.tblPanelGroup}">
 			<ice:dataTable id="dtbAnswers" var="unit" width="100%"
-				binding="#{managedBean.tblAnswers}" value="#{managedBean.answerList}" 
-				columnClasses="tmplApplicationCol3TableColumn1,tmplApplicationCol3TableColumn2,tmplApplicationCol3TableColumn3Right">
+				binding="#{managedBean.tblAnswers}" value="#{managedBean.answerList}"
+				rendered="#{!empty(managedBean.answerList)}">
 
-				<ice:column id="colCode">
+				<ice:column id="colAnswer" style="width: 60%">
 					<f:facet name="header">
 						<ice:outputText	value="#{res['question.answer.label.answer']}"></ice:outputText>
 					</f:facet>
@@ -70,25 +71,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					</ice:panelGroup>
 				</ice:column>
 
-				<ice:column id="colCorrect">
+				<ice:column id="colCorrect" style="width: 20%">
 					<f:facet name="header">
 						<ice:outputText	value="#{res['question.answer.label.correct']}"></ice:outputText>
 					</f:facet>
 					<ice:panelGroup contextValue="text">
 						<ice:selectBooleanCheckbox id="chkCorrect" value="#{unit.correct}"
-							binding="#{managedBean.correctSelectBooleanCheckbox}" immediate="true"
-							valueChangeListener="#{managedBean.correctValueChangeEvent}" partialSubmit="true" >
+							immediate="true" partialSubmit="true" >
 						</ice:selectBooleanCheckbox>
 					</ice:panelGroup>
 				</ice:column>
 
-				<ice:column id="colShare" styleClass="tmplShareRightColumn">
+				<ice:column id="colAction" style="width: 20%">
 					<f:facet name="header">
 						<ice:outputText	value="#{res['question.answer.label.action']}"></ice:outputText>
 					</f:facet>
-					<ice:panelGroup contextValue="text">
-						<ice:commandLink id="oplEdit" value="#{res['common.label.edit']}" action="#{managedBean.editAnswerAction}"  styleClass="editRecord" />
-						<ice:commandLink id="oplRemove" value="#{res['common.action.remove.link']}" actionListener="#{managedBean.removeAnswerConfirmActionListener}"  styleClass="editRecord" />
+					<ice:panelGroup style="text-align: center;">
+						<ice:commandLink id="oplEdit" value="#{res['common.label.edit']}" action="#{managedBean.editAnswerAction}" styleClass="editRecord" immediate="true"/>
+						<ice:commandLink id="oplRemove" value="#{res['common.action.remove.link']}" actionListener="#{managedBean.removeAnswerConfirmActionListener}" styleClass="removeRecord" immediate="true"/>
 					</ice:panelGroup>
 				</ice:column>
 

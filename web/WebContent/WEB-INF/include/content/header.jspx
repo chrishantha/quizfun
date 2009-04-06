@@ -50,8 +50,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				<!-- Home -->
 				<ice:menuItem id="mitHome" value="#{res['menu.home.label']}" action="home" immediate="true" />
 	
-				<!-- Reference Data -->
-				<ice:menuItem id="mitRefData" value="#{res['menu.reference.label']}" renderedOnUserRole="ROLE_LECTURER">
+				<!-- Reference Data renderedOnUserRole="ROLE_LECTURER" -->
+				<ice:menuItem id="mitRefData" value="#{res['menu.reference.label']}" >
 					<ice:menuItem id="mitCourse" value="#{res['menu.course.label']}" action="searchCourse" immediate="true">
 						<ice:menuItem id="mitSearchCourse" value="#{res['menu.search.label']}" action="searchCourse" immediate="true" />
 						<ice:menuItem id="mitCreateCourse" value="#{res['menu.create.label']}" action="createCourse" immediate="true" />
@@ -68,13 +68,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</ice:menuItem>
 				
 				<!-- Game -->
+				<!-- Comment this menu as it is not implemented completely - Isuru 19-03-2009
 				<ice:menuItem id="mitGame" value="#{res['menu.game.label']}" renderedOnUserRole="ROLE_LECTURER">
 					<ice:menuItem id="mitSearchGame" value="#{res['menu.search.label']}" action="searchGame" immediate="true" />				
 					<ice:menuItem id="mitCreateGame" value="#{res['menu.create.label']}" action="createGame" immediate="true" />
 				</ice:menuItem>	
+				 -->
 				
-				<!-- Administration -->
-				<ice:menuItem id="mitAdmin" value="#{res['menu.administration.label']}" renderedOnUserRole="ROLE_ADMIN">
+				<!-- Administration renderedOnUserRole="ROLE_ADMIN" -->
+				<ice:menuItem id="mitAdmin" value="#{res['menu.administration.label']}" >
 					<ice:menuItem id="mitUser" value="#{res['menu.user.label']}" action="searchUser" immediate="true">
 						<ice:menuItem id="mitSearchUser" value="#{res['menu.search.label']}" action="searchUser" immediate="true" />
 						<ice:menuItem id="mitCreateUser" value="#{res['menu.create.label']}" action="createUser" immediate="true" />
@@ -82,12 +84,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				</ice:menuItem>
 
 				<!-- About -->
-				<ice:menuItem id="mitAbout" value="#{res['menu.about.label']}" action="test" immediate="true" />
+				<ice:menuItem id="mitAbout" value="#{res['menu.about.label']}" action="about" immediate="true" />
 			</ice:menuBar>
 			<!-- Ice Connection -->
 			<ice:outputConnectionStatus id="connStatus" showPopupOnDisconnect="true" style="float: right;" />
 		</div>
 	
-	</div> <!-- /menu"> -->
+	</div> <!-- /menu -->
 </ice:form>
 </div>

@@ -138,10 +138,9 @@ public class HibernateQuestionDao extends HibernateDaoSupport implements Questio
 		}
 		Session session = getSession(false);
 
-		Question question = new Question();
+		Question question = null;
 		try {
 			question = (Question) session.get(Question.class, id);
-			session.refresh(question);
 	        Hibernate.initialize(question.getAnswers());
 		} catch (HibernateException e) {
 			throw convertHibernateAccessException(e);
@@ -149,7 +148,7 @@ public class HibernateQuestionDao extends HibernateDaoSupport implements Questio
 		
 		if(question != null){
 			if(logger.isDebugEnabled()){
-				logger.debug("Returning " + question.getId() + " Question");
+				logger.debug("Returning " + question);
 			}
 			return question;	
 		}
@@ -162,7 +161,6 @@ public class HibernateQuestionDao extends HibernateDaoSupport implements Questio
 		if (logger.isDebugEnabled()) {
 			logger.info("Updating Question: " + question);
 		}
-		//Long id = null;
 		Session session = getSession(false);
 		try {
 			return (Question)session.merge(question);
@@ -170,8 +168,6 @@ public class HibernateQuestionDao extends HibernateDaoSupport implements Questio
 		} catch (HibernateException ex) {
 			throw convertHibernateAccessException(ex);
 		}
-		
-		
 	}
 	
 

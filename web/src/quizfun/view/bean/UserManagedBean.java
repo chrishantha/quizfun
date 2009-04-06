@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
 import quizfun.model.entity.User;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 import com.icesoft.faces.component.ext.HtmlInputSecret;
@@ -159,7 +160,7 @@ public abstract class UserManagedBean extends CourseSelectManagedBean {
 	protected boolean validatePassword() {
 		if (!user.getPassword().equals(confirmPassword)) {
 			JSFUtils.addFacesErrorMessage(confirmPasswordInputSecret, "password.mismatch.error");
-			confirmPasswordInputSecret.requestFocus();
+			ICEfacesUtils.setFocus(confirmPasswordInputSecret);
 			return false;
 		}
 		return true;
@@ -173,7 +174,7 @@ public abstract class UserManagedBean extends CourseSelectManagedBean {
 		}
 		if (validateCourse && (course == null)) {
 			JSFUtils.addFacesErrorMessage("selectcourse.course.required.message");
-			courseSelectInputText.requestFocus();
+			ICEfacesUtils.setFocus(courseSelectInputText);
 			return false;
 		}
 		return true;
@@ -254,7 +255,7 @@ public abstract class UserManagedBean extends CourseSelectManagedBean {
 	public void clearActionListener(ActionEvent event) {
 		clearValues();
 		resetComponents();
-		userNameInputText.requestFocus();
+		ICEfacesUtils.setFocus(userNameInputText);
 	}
 	
 	protected String encodePassword(String password, String username) {

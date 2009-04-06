@@ -35,4 +35,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<c:if test="#{(not empty common.user) and (not empty common.user.course)}">
 		<p>Your course is <span style="font-weight: bold; margin-left: 1em;">#{common.user.course.name}</span></p>
 	</c:if>
+	
+	<p>You need to download the QuizFun mobile application to play the game.</p>
+	
+	<p><a href="http://chrishantha.googlepages.com/QuizFun.jar">http://chrishantha.googlepages.com/QuizFun.jar</a></p>
+	<p><a href="http://chrishantha.googlepages.com/QuizFun.jad">http://chrishantha.googlepages.com/QuizFun.jad</a></p>
+	
 </div>

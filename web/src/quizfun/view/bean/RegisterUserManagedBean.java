@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import quizfun.model.entity.User;
 import quizfun.model.exception.DuplicateUserException;
 import quizfun.model.util.SpringSecurityUtil;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -91,6 +92,6 @@ public class RegisterUserManagedBean extends UserManagedBean {
 	public void clearActionListener(ActionEvent event) {
 		clearValues();
 		resetComponents();
-		passwordInputSecret.requestFocus();
+		ICEfacesUtils.setFocus(passwordInputSecret);
 	}
 }

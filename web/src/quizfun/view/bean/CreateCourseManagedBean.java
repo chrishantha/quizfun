@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Course;
 import quizfun.model.exception.DuplicateCourseException;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -44,7 +45,7 @@ public class CreateCourseManagedBean extends CourseManagedBean {
 			serviceLocator.getCourseService().saveCourse(course);
 			clearValues();
 			JSFUtils.addFacesInfoMessage("course.save.successful");
-			codeInputText.requestFocus();
+			ICEfacesUtils.setFocus(codeInputText);
 		} catch (DuplicateCourseException e) {
 			JSFUtils.addFacesErrorMessage("course.save.duplicate", new Object[] { course.getCode() });
 			return;

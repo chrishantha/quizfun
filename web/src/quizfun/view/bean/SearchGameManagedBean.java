@@ -29,6 +29,7 @@ import quizfun.model.dto.GameSCDO;
 import quizfun.model.dto.ModuleSCDO;
 import quizfun.model.entity.Game;
 import quizfun.model.entity.Module;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -95,7 +96,7 @@ public class SearchGameManagedBean extends GameManagedBean{
 			} else {
 				gameMatcherEditor = new TextMatcherEditor<Game>(gameFilterator);
 				gameFilterList = new FilterList<Game>(GlazedLists.eventList(games), gameMatcherEditor);
-				filterInputText.requestFocus();
+				ICEfacesUtils.setFocus(filterInputText);
 			}
 		} catch (Throwable e) {
 			logger.error("Exception when finding game: " + gameSCDO, e);
@@ -109,14 +110,14 @@ public class SearchGameManagedBean extends GameManagedBean{
 		if (gameFilterList == null || gameFilterList.isEmpty()) {
 			JSFUtils.addFacesInfoMessage(filterInputText, "common.filter.empty");
 		}
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	public void filterClearActionListener(ActionEvent event) {
 		filterText = null;
 		filterList();
 		filterInputText.resetValue();
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	private void filterList() {

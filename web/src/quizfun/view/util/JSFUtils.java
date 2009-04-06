@@ -111,57 +111,75 @@ public class JSFUtils {
 	}
 
 	public static void addApplicationErrorMessage() {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle("application.error", FacesMessage.SEVERITY_FATAL));
+		addFacesFatalMessage("application.error");
 	}
 
 	public static void addFacesInfoMessage(String key) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle(key, FacesMessage.SEVERITY_INFO));
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_INFO, null);
 	}
 
 	public static void addFacesInfoMessage(String key, Object[] args) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle(key, FacesMessage.SEVERITY_INFO, args));
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_INFO, args);
 	}
 
 	public static void addFacesWarnMessage(String key) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle(key, FacesMessage.SEVERITY_WARN));
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_WARN, null);
 	}
 
 	public static void addFacesWarnMessage(String key, Object[] args) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle(key, FacesMessage.SEVERITY_WARN, args));
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_WARN, args);
 	}
 
 	public static void addFacesErrorMessage(String key) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle(key, FacesMessage.SEVERITY_ERROR));
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_ERROR, null);
 	}
 
 	public static void addFacesErrorMessage(String key, Object[] args) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(null, getMessageFromBundle(key, FacesMessage.SEVERITY_ERROR, args));
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_ERROR, args);
+	}
+	
+	public static void addFacesFatalMessage(String key) {
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_FATAL, null);
+	}
+
+	public static void addFacesFatalMessage(String key, Object[] args) {
+		addGlobalFacesMessage(key, FacesMessage.SEVERITY_FATAL, args);
 	}
 
 	public static void addFacesInfoMessage(UIComponent component, String key) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(component.getClientId(facesContext), getMessageFromBundle(key, FacesMessage.SEVERITY_INFO));
+		addFacesMessage(component, key, FacesMessage.SEVERITY_INFO, null);
 	}
 
 	public static void addFacesInfoMessage(UIComponent component, String key, Object[] args) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(component.getClientId(facesContext), getMessageFromBundle(key, FacesMessage.SEVERITY_INFO, args));
+		addFacesMessage(component, key, FacesMessage.SEVERITY_INFO, args);
 	}
 
 	public static void addFacesErrorMessage(UIComponent component, String key) {
-		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(component.getClientId(facesContext), getMessageFromBundle(key, FacesMessage.SEVERITY_ERROR));
+		addFacesMessage(component, key, FacesMessage.SEVERITY_ERROR, null);
 	}
 
 	public static void addFacesErrorMessage(UIComponent component, String key, Object[] args) {
+		addFacesMessage(component, key, FacesMessage.SEVERITY_ERROR, args);
+	}
+	
+	private static void addFacesMessage(UIComponent component, String key, FacesMessage.Severity severity, Object[] args) {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
-		facesContext.addMessage(component.getClientId(facesContext), getMessageFromBundle(key, FacesMessage.SEVERITY_ERROR, args));
+		facesContext.addMessage(component.getClientId(facesContext), getFacesMessage(key, severity, args));
+	}
+	
+	private static void addGlobalFacesMessage(String key, FacesMessage.Severity severity, Object[] args) {
+		// Global Message.
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		facesContext.addMessage(null, getFacesMessage(key, severity, args));
+	}
+	
+	private static FacesMessage getFacesMessage(String key, FacesMessage.Severity severity, Object[] args) {
+		FacesMessage facesMessage;
+		if (args != null) {
+			facesMessage = getMessageFromBundle(key, severity, args);
+		} else {
+			facesMessage = getMessageFromBundle(key, severity);
+		}
+		return facesMessage;
 	}
 }

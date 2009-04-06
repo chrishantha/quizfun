@@ -34,6 +34,7 @@ import quizfun.model.dto.ModuleSCDO;
 import quizfun.model.dto.QuestionSCDO;
 import quizfun.model.entity.Game;
 import quizfun.model.entity.Question;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -81,9 +82,7 @@ public class CreateGameManagedBean extends GameManagedBean{
 			@Override
 			public void getFilterStrings(List<String> baseList, Question question) {
 				baseList.add(String.valueOf(question.getId()));
-				baseList.add(question.getQuestion());
-				baseList.add(String.valueOf(question.getLevel()));
-				baseList.add(String.valueOf(question.getType()));
+				baseList.add(question.getQuestion());;
 				baseList.add(question.getModule().getCode());
 				baseList.add(question.getModule().getName());
 			}
@@ -150,7 +149,7 @@ public class CreateGameManagedBean extends GameManagedBean{
 			} else {
 				questionMatcherEditor = new TextMatcherEditor<Question>(questionFilterator);
 				filterList = new FilterList<Question>(GlazedLists.eventList(questions), questionMatcherEditor);
-				filterInputText.requestFocus();
+				ICEfacesUtils.setFocus(filterInputText);
 			}
 		} catch (Throwable e) {
 			logger.error("Exception when finding question: " + questionSCDO, e);
@@ -205,11 +204,11 @@ public class CreateGameManagedBean extends GameManagedBean{
 		// order the questions and show.
 		if (selectedQuestions != null || !selectedQuestions.isEmpty()) {
 			for (Question ques : selectedQuestions) {
-				if (ques.getLevel() == 1) {
+				if (ques.getLevel() == Question.LEVEL_EASY) {
 					easyQues.add(ques);					
-				} else if (ques.getLevel() == 2) {
+				} else if (ques.getLevel() == Question.LEVEL_MEDIUM) {
 					mediumQues.add(ques);
-				} else if (ques.getLevel() == 3) {
+				} else if (ques.getLevel() == Question.LEVEL_HARD) {
 					hardQues.add(ques);
 				}
 			}	
@@ -251,17 +250,17 @@ public class CreateGameManagedBean extends GameManagedBean{
 			logger.debug("Generated : " + id);
 			for (Question ques : questions) {
 				if (ques.getId().equals(Long.valueOf(id))) {
-					if ((ques.getLevel() == 1) && (!easyQues.contains(ques)) && (easyQues.size() < 5)) {
+					if ((ques.getLevel() == Question.LEVEL_EASY) && (!easyQues.contains(ques)) && (easyQues.size() < 5)) {
 						easyQues.add(ques);
 						listSize++;
 						logger.debug("Easy Question Id : " + ques.getId());
 					} 
-					else if ((ques.getLevel() == 2) && (!mediumQues.contains(ques)) && (mediumQues.size() < 5)) {
+					else if ((ques.getLevel() == Question.LEVEL_MEDIUM) && (!mediumQues.contains(ques)) && (mediumQues.size() < 5)) {
 						mediumQues.add(ques);
 						listSize++;
 						logger.debug("Medium Question Id : " + ques.getId());
 					} 
-					else if ((ques.getLevel() == 3) && (!hardQues.contains(ques)) && (hardQues.size() < 5)) {
+					else if ((ques.getLevel() == Question.LEVEL_HARD) && (!hardQues.contains(ques)) && (hardQues.size() < 5)) {
 						hardQues.add(ques);
 						listSize++;
 						logger.debug("Hard Question Id : " + ques.getId());
@@ -305,7 +304,7 @@ public class CreateGameManagedBean extends GameManagedBean{
 	public void saveActionListener(ActionEvent event) {
 		if (module == null) {
 			JSFUtils.addFacesErrorMessage("game.module.required.message");
-			moduleSelectInputText.requestFocus();
+			ICEfacesUtils.setFocus(moduleSelectInputText);
 			return;
 		}		
 		
@@ -326,7 +325,7 @@ public class CreateGameManagedBean extends GameManagedBean{
 			serviceLocator.getGameService().saveGame(game);
 			super.clearModuleActionListener(event);
 			//clearValues();
-			moduleSelectInputText.requestFocus();
+			ICEfacesUtils.setFocus(moduleSelectInputText);
 			JSFUtils.addFacesInfoMessage("game.save.successful");
 		
 		} catch (Throwable e) {

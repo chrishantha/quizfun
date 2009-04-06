@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Course;
 import quizfun.view.servicelocator.ServiceLocator;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -163,6 +164,6 @@ public abstract class CourseSelectManagedBean {
 		
 		courseMatcherEditor.setFilterText(new String[] {});
 		
-		courseSelectInputText.requestFocus();
+		ICEfacesUtils.setFocus(courseSelectInputText);
 	}
 }

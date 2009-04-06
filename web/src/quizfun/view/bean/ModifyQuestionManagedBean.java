@@ -19,18 +19,18 @@
 package quizfun.view.bean;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Set;
 
-import javax.faces.component.html.HtmlSelectBooleanCheckbox;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Answer;
 import quizfun.model.entity.Question;
-import quizfun.model.exception.QuestionNotFoundException;
+import quizfun.model.util.MergeCallback;
+import quizfun.model.util.Utils;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -48,39 +48,64 @@ public class ModifyQuestionManagedBean extends QuestionManagedBean {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Object retrieved from session: {}", modifyingQuestion);
 		}
-		answerList = new ArrayList<Answer>(0);
+		answerList = new ArrayList<Answer>();
 		question = new Question();
 		resetValues();
 		initializeModuleSelectInput();
 	}
 	
 	private void resetValues() {
-
 		question.setId(modifyingQuestion.getId());
 		question.setQuestion(modifyingQuestion.getQuestion());
 		question.setHint(modifyingQuestion.getHint());
 		question.setLevel(modifyingQuestion.getLevel());
 		question.setType(modifyingQuestion.getType());
 		question.setReference(modifyingQuestion.getReference());
-		Question ques = new Question();
-		try {
-			ques = serviceLocator.getQuestionService().findQuestionById(modifyingQuestion.getId());
-		} catch (QuestionNotFoundException e) {
-			return;
+		
+		answerInput = null;
+		
+		Set<Answer> answers = modifyingQuestion.getAnswers();
+		answerList.clear();
+		for (Answer answer : answers) {
+			// Only answer and correct should be displayed.
+			Answer ansObj = new Answer();
+			ansObj.setAnswer(answer.getAnswer());
+			ansObj.setCorrect(answer.isCorrect());
+			answerList.add(ansObj);
 		}
-	//	ans = ques.getAnswers();
-		question.setAnswers(ques.getAnswers());
-		answerList = new ArrayList<Answer>(ques.getAnswers());
 		
 		module = modifyingQuestion.getModule();
 		selectedModule = JSFUtils.getStringFromBundle("question.selectedmodule.display.pattern", new Object[] { module.getCode(),
 				module.getName() });
 	}
 	
+	private MergeCallback<Answer> answerMergeCallback;
+	
+	public MergeCallback<Answer> getAnswerMergeCallback() {
+		if (answerMergeCallback == null) {
+			answerMergeCallback = new MergeCallback<Answer>() {
+
+				@Override
+				public void updateEntity(Answer detachedObject, Answer newObject) {
+					// No need to set the answer as equals is implemented based on the answer.
+					// This is for clarity
+					detachedObject.setAnswer(newObject.getAnswer());
+					detachedObject.setCorrect(newObject.isCorrect());
+				}
+				
+			};
+		}
+		return answerMergeCallback;
+	}
+	
 	public void saveActionListener(ActionEvent event) {
 		if (module == null) {
 			JSFUtils.addFacesErrorMessage("question.module.required.message");
-			moduleSelectInputText.requestFocus();
+			ICEfacesUtils.setFocus(moduleSelectInputText);
+			return;
+		}
+		
+		if (!validateAnswers(answerList)) {
 			return;
 		}
 		
@@ -88,22 +113,23 @@ public class ModifyQuestionManagedBean extends QuestionManagedBean {
 			if (!modifyingQuestion.getModule().equals(module)) {
 				modifyingQuestion.setModule(module);
 			}
-//			ans = new HashSet<Answer>(answerList);
-			question.setAnswers(new HashSet<Answer>(answerList));
 			modifyingQuestion.setId(question.getId());
 			modifyingQuestion.setQuestion(question.getQuestion());
 			modifyingQuestion.setHint(question.getHint());
 			modifyingQuestion.setLevel(question.getLevel());
 			modifyingQuestion.setType(question.getType());
 			modifyingQuestion.setReference(question.getReference());
-			modifyingQuestion.setAnswers(question.getAnswers());
+			// Set question for each answer. There might be new answers added.
+			for (Answer answer : answerList) {
+				answer.setQuestion(modifyingQuestion);
+			}
+			Utils.updateDetachedList(modifyingQuestion.getAnswers(), answerList,  getAnswerMergeCallback());
 			modifyingQuestion = serviceLocator.getQuestionService().updateQuestion(modifyingQuestion);
 			
 			if (logger.isDebugEnabled()) {
 				logger.debug("Question updated: {}", modifyingQuestion);
 			}
 			JSFUtils.addFacesInfoMessage("question.save.successful");
-			answrInputTextArea.resetValue();
 		} catch (Throwable e) {
 			logger.error("Exception when saving question: " + question, e);
 			JSFUtils.addApplicationErrorMessage();
@@ -119,82 +145,11 @@ public class ModifyQuestionManagedBean extends QuestionManagedBean {
 		 refInputTextArea.resetValue();	
 		 typeSelectOneMenu.resetValue();
 		 levelSelectOneMenu.resetValue();
-		 answrInputTextArea.resetValue();
-		 correctSelectBooleanCheckbox.resetValue();
+		 answerInputTextArea.resetValue();
 		 tblAnswers.getChildren().clear();
-		 tblPanelGroup.getChildren().clear();	
+		 tblPanelGroup.getChildren().clear();
 		 selectedModuleInputText.resetValue();
-	}
-	
-	/**
-	 * Add an Answer
-	 */
-	public void addAnswers() {
-		logger.debug("CreateQuestionManagedBean - addAnswer");
-		
-		String answer = (String) answrInputTextArea.getValue();
-		Answer newAnswer = new Answer();
-		newAnswer.setAnswer(answer);
-		newAnswer.setQuestion(question);
-		answerList.add(newAnswer);		
-//		ans.add(newAnswer);
-		question.setAnswers(new HashSet<Answer>(answerList));
-		answrInputTextArea.resetValue();
-	}
-	
-	
-	public void correctValueChangeEvent(ValueChangeEvent event) {
-		Answer correctAns = (Answer) tblAnswers.getRowData();
-		HtmlSelectBooleanCheckbox selectBooleanCheckbox = (HtmlSelectBooleanCheckbox) event.getComponent();
-		Boolean correct = false;
-		if (selectBooleanCheckbox.getValue() != null) {
-			correct = (Boolean) selectBooleanCheckbox.getValue();
-		}
-		correctAns.setCorrect(correct);
 	}	
-	
-	
-	public void editAnswerAction() {
-		this.answer = (Answer) tblAnswers.getRowData();
-		answrInputTextArea.setValue(this.answer.getAnswer());
-		updateAnswer = true;
-	}
-	
-	public void editAnswer() {
-		this.answer.setAnswer((String) answrInputTextArea.getValue());
-		for(Answer answr :this.answerList) {
-			if(answr.getAnswer().equals(this.answer.getAnswer())) {
-				answr.setAnswer((String) answrInputTextArea.getValue());
-				answrInputTextArea.resetValue();
-				break;
-			}
-			
-		}
-		updateAnswer = false;
-	}
-	
-	public void removeAnswerConfirmActionListener(ActionEvent event) {
-		this.answer = (Answer) tblAnswers.getRowData();
-		removeAnswerConfirmVisible = this.answer != null;
-		if (removeAnswerConfirmVisible) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Going to remove: {}", this.answer);
-			}
-		}
-	}
-	public void removeAnswerActionListener(ActionEvent event) {
-		if (this.answer == null) {
-			return;
-		}
-		this.answerList.remove(this.answer);
-//		this.ans.remove(this.answer);
-		removeAnswerConfirmVisible = false;
-
-	}
-	
-	public void closeRemoveAnswerActionListener(ActionEvent event) {
-		removeAnswerConfirmVisible = false;
-	}		
 	
 	public Question getModifyingQuestion() {
 		return modifyingQuestion;

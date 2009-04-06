@@ -85,9 +85,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 </div> <!-- /main -->
 <script type="text/javascript">
 	function setInitialFocus(focusId) {
-		var initialFocusComponent = document.getElementById(focusId);
-		if (initialFocusComponent) {
-			initialFocusComponent.focus();
+		setFocusToComponent(focusId);
+	}
+	function setFocusToComponent(componentId) {
+		var component = document.getElementById(componentId);
+		if (component &amp;&amp; component.focus) {
+			component.focus();
 		}
 	}
 </script>

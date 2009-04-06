@@ -22,6 +22,7 @@ import javax.faces.event.ActionEvent;
 
 import quizfun.model.entity.Course;
 import quizfun.view.servicelocator.ServiceLocator;
+import quizfun.view.util.ICEfacesUtils;
 
 import com.icesoft.faces.component.ext.HtmlInputText;
 
@@ -73,6 +74,6 @@ public abstract class CourseManagedBean {
 
 		codeInputText.resetValue();
 		nameInputText.resetValue();
-		codeInputText.requestFocus();
+		ICEfacesUtils.setFocus(codeInputText);
 	}
 }

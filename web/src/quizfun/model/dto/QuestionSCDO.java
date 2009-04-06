@@ -43,6 +43,8 @@ public class QuestionSCDO implements Serializable {
 		builder.append("QuestionSCDO {");
 		builder.append("id = ").append('\"').append(getId()).append('\"');
 		builder.append(separator).append("question = ").append('\"').append(getQuestion()).append('\"');
+		builder.append(separator).append("type = ").append(getType());
+		builder.append(separator).append("level = ").append(getLevel());
 		builder.append(separator).append("moduleSCDO = ").append(getModuleSCDO());
 		builder.append("}");
 		return builder.toString();

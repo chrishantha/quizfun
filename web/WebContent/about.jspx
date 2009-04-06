@@ -16,15 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!-- Author: Hiranya Mudunkotuwa -->
 <ui:composition template="/WEB-INF/include/template/page-template.jspx"
              xmlns="http://www.w3.org/1999/xhtml"
              xmlns:ui="http://java.sun.com/jsf/facelets"
              xmlns:f="http://java.sun.com/jsf/core">
 
 
-    <ui:param name="pageTitle" value="#{res['question.page.title']}" />
-    <ui:param name="contentHeader" value="#{res['question.create.content.header']}"/>
+    <ui:param name="pageTitle" value="#{res['about.page.title']}" />
+    <ui:param name="contentHeader" value="#{res['about.content.header']}"/>
 
     <ui:define name="content">
 
@@ -37,18 +36,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- insert content here -->
             <ui:define name="pageContent">
-	            <ui:include src="/WEB-INF/include/question/inc-create.jspx" /> 
+	            <ui:include src="/WEB-INF/include/about.jspx" /> 
             </ui:define>
+
 
         </ui:decorate>
 
     </ui:define>
-    <ui:param name="breadcrumbenabled" value="true" />
-    <ui:param name="currentpagename" value="#{res['breadcrumb.question.create.label']}" />
-
-    <ui:define name="script">
-		<script type="text/javascript">
-			setInitialFocus("frmModule:stxtModule");
-		</script>
-    </ui:define>
+    
 </ui:composition>

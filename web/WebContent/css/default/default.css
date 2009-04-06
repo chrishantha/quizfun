@@ -199,6 +199,13 @@ div.clearer {
 	border-color: transparent;
 }
 
+.popupConfirmButton {
+	min-width: 40px; 
+	width: auto !important;
+	width: 40px;
+	padding: 2px 5px 2px 5px;
+}
+
 /*Popup Common - End*/
 
 /* Panel Grid Styles - Start */

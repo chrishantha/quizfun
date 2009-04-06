@@ -30,6 +30,7 @@ import quizfun.model.dto.CourseSCDO;
 import quizfun.model.dto.UserSCDO;
 import quizfun.model.entity.Course;
 import quizfun.model.entity.User;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -161,7 +162,7 @@ public class SearchUserManagedBean extends UserManagedBean {
 			} else {
 				userMatcherEditor = new TextMatcherEditor<User>(userFilterator);
 				filterList = new FilterList<User>(GlazedLists.eventList(users), userMatcherEditor);
-				filterInputText.requestFocus();
+				ICEfacesUtils.setFocus(filterInputText);
 			}
 		} catch (Throwable e) {
 			logger.error("Exception when finding user: " + userSCDO, e);
@@ -175,14 +176,14 @@ public class SearchUserManagedBean extends UserManagedBean {
 		if (filterList == null || filterList.isEmpty()) {
 			JSFUtils.addFacesInfoMessage(filterInputText, "common.filter.empty");
 		}
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	public void filterClearActionListener(ActionEvent event) {
 		filterText = null;
 		filterList();
 		filterInputText.resetValue();
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	private void filterList() {

@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Module;
+import quizfun.view.util.ICEfacesUtils;
 
 import com.icesoft.faces.component.ext.HtmlInputText;
 
@@ -73,6 +74,6 @@ public abstract class ModuleManagedBean extends CourseSelectManagedBean {
 
 		codeInputText.resetValue();
 		nameInputText.resetValue();
-		codeInputText.requestFocus();
+		ICEfacesUtils.setFocus(codeInputText);
 	}
 }

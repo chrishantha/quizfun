@@ -18,9 +18,7 @@
 
 package quizfun.model.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import quizfun.model.dao.QuestionDao;
 import quizfun.model.dto.QuestionSCDO;
-import quizfun.model.entity.Answer;
 import quizfun.model.entity.Question;
 import quizfun.model.exception.DuplicateQuestionException;
 import quizfun.model.exception.QuestionNotFoundException;
@@ -59,20 +56,7 @@ public class QuestionServiceImpl implements QuestionService {
 	@Override
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { DuplicateQuestionException.class })
 	public void saveQuestion(Question question) {
-
-		Set<Answer> answers = question.getAnswers();
-		question.setAnswers(null);
-		Long id = questionDao.saveQuestion(question);
-		Question ques = questionDao.findQuestionById(id);
-		Set<Answer> answerList = new HashSet<Answer>();
-
-		for (Answer ans :answers){
-			ans.setQuestion(ques);
-			answerList.add(ans);
-		}    
-		ques.setAnswers(answerList);
-		questionDao.updateQuestion(ques);
-		return;
+		questionDao.saveQuestion(question);
 	}
 
 	@Override
@@ -100,35 +84,9 @@ public class QuestionServiceImpl implements QuestionService {
 	}	
 	
 	@Override
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = { DuplicateQuestionException.class })
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
 	public Question updateQuestion(Question question) {
-		Question ques = questionDao.findQuestionById(question.getId());
-		Set<Answer> answerList = new HashSet<Answer>();
-
-		for (Answer ans :question.getAnswers()){
-			ans.setQuestion(ques);
-			answerList.add(ans);
-		}   
-		for (Answer ans :ques.getAnswers()) {
-			if (question.getAnswers().contains(ans)) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("Contain answer");
-				}
-			}
-			else {
-				questionDao.deleteAnswer(ans);
-			}
-		}
-		ques.setAnswers(answerList);
-		ques.setId(question.getId());
-		ques.setModule(question.getModule());
-		ques.setHint(question.getHint());
-		ques.setLevel(question.getLevel());
-		ques.setQuestion(question.getQuestion());
-		ques.setReference(question.getReference());
-		ques.setType(question.getType());
-		
-		return questionDao.updateQuestion(ques);
+		return questionDao.updateQuestion(question);
 	}
 
 	@Override

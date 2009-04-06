@@ -105,13 +105,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			</ice:panelGroup>
 
 			<ice:dataTable id="tblQuestion" width="100%" rows="10" var="question" value="#{searchQuestion.filterList}" binding="#{searchQuestion.dataTable}" rendered="#{!empty(searchQuestion.filterList)}">
-							
-				<ice:column id="id" style="width: 20%">
+				<!-- Do not show ID
+				<ice:column id="id" style="width: 10%">
 					<f:facet name="header">
 						<ice:outputText	value="#{res['question.table.column.id.header']}"></ice:outputText>
 					</f:facet>
 					<ice:outputText value="#{question.id}"></ice:outputText>
 				</ice:column>
+				 -->
 				
 				<ice:column id="ques" style="width: 60%">
 					<f:facet name="header">
@@ -124,7 +125,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					<f:facet name="header">
 						<ice:outputText	value="#{res['question.table.column.level.header']}"></ice:outputText>
 					</f:facet>
-					<ice:outputText value="#{question.level}"></ice:outputText>
+					<ice:outputFormat value="#{res['question.level.message']}">
+						<f:param value="#{question.level}"></f:param>
+					</ice:outputFormat>
 				</ice:column>		
 				<ice:column id="module" style="width: 10%">
 					<f:facet name="header">
@@ -185,13 +188,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<f:facet name="body">
 				<ice:panelGroup styleClass="popupBody">
 					<ice:outputFormat value="#{res['question.remove.confirm.text']}" style="display: block; padding: 5px 10px 15px 10px;">
-						<f:param value="#{searchQuestion.removingQuestion.id}" />
+						<f:param value="#{searchQuestion.removingQuestion.question}" />
 					</ice:outputFormat>
 					<ice:panelGroup style="text-align: center;">
 						<ice:commandButton id="btnYes" actionListener="#{searchQuestion.removeActionListener}"
-							value="#{res['common.label.yes']}" style="padding: 2px 5px 2px 5px;" />
+							value="#{res['common.label.yes']}" styleClass="popupConfirmButton" />
 						<ice:commandButton id="btnNo" immediate="true" actionListener="#{searchQuestion.closeRemoveActionListener}"
-							value="#{res['common.label.no']}" style="padding: 2px 5px 2px 5px;" />
+							value="#{res['common.label.no']}" styleClass="popupConfirmButton" />
 					</ice:panelGroup>
 				</ice:panelGroup>
 			</f:facet>

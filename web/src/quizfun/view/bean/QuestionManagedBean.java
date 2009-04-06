@@ -18,8 +18,10 @@
 
 package quizfun.view.bean;
 
+import java.util.Collection;
 import java.util.List;
 
+import javax.faces.component.UIInput;
 import javax.faces.component.html.HtmlDataTable;
 import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.event.ActionEvent;
@@ -29,18 +31,20 @@ import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Answer;
 import quizfun.model.entity.Question;
+import quizfun.view.util.ICEfacesUtils;
+import quizfun.view.util.JSFUtils;
 
 import com.icesoft.faces.component.ext.HtmlInputTextarea;
 import com.icesoft.faces.component.ext.HtmlPanelGroup;
-import com.icesoft.faces.component.ext.HtmlSelectBooleanCheckbox;
 
 /**
  * @author Hiranya Mudunkotuwa
  */
 public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 	final Logger logger = LoggerFactory.getLogger(QuestionManagedBean.class);
+	
+	private static final int MAX_ANSWERS = 5;
 
-	//protected ServiceLocator serviceLocator;
 	protected Question question;
 
 	protected HtmlDataTable tblAnswers;
@@ -49,34 +53,59 @@ public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 	protected HtmlInputTextarea quesInputTextArea;
 	protected HtmlInputTextarea hintInputTextArea;
 	protected HtmlInputTextarea refInputTextArea;
-	protected HtmlInputTextarea answrInputTextArea;
+	protected HtmlInputTextarea answerInputTextArea;
 
 
 	protected HtmlSelectOneMenu typeSelectOneMenu;
 	protected HtmlSelectOneMenu levelSelectOneMenu;
-	protected HtmlSelectBooleanCheckbox correctSelectBooleanCheckbox;
-
 
 	protected boolean loadModuleDetails = false;	
 	protected boolean updateAnswer = false;
-
-
+	
+	//Value bound to answerInputTextArea
+	protected String answerInput;
 
 	protected List<Answer> answerList;
-//	protected Set<Answer> ans;
 	protected Answer answer;
 
 	protected boolean removeAnswerConfirmVisible;
+	
+	protected boolean validateAnswers(Collection<Answer> answers) {
+		if (answers == null || answers.isEmpty()) {
+			JSFUtils.addFacesErrorMessage("question.answers.required.message");
+			return false;
+		}
+		if (answerList.size() > MAX_ANSWERS) {
+			JSFUtils.addFacesErrorMessage("question.answers.limit.message", new Object[] {MAX_ANSWERS});
+			return false;
+		}
+		boolean correctAns = false;
+		for (Answer a : answers) {
+			if (correctAns && a.isCorrect()) {
+				// TODO: For now only allow one answer to be correct.
+				JSFUtils.addFacesErrorMessage("question.correctans.selectone.message");
+				return false;
+			}
+			if(a.isCorrect()) {
+				correctAns = true;
+			}
+		}
+		if (!correctAns) {
+			JSFUtils.addFacesErrorMessage("question.correctans.required.message");
+			return false;			
+		}
+		return true;
+	}
 
 	public void clearActionListener(ActionEvent event) {
 		clearValues();
-		
-		 quesInputTextArea.resetValue();
-		 hintInputTextArea.resetValue();
-		 refInputTextArea.resetValue();	
-		 typeSelectOneMenu.resetValue();
-		 levelSelectOneMenu.resetValue();
-		 quesInputTextArea.requestFocus();
+
+		quesInputTextArea.resetValue();
+		hintInputTextArea.resetValue();
+		refInputTextArea.resetValue();
+		typeSelectOneMenu.resetValue();
+		levelSelectOneMenu.resetValue();
+		ICEfacesUtils.setFocus(quesInputTextArea);
 	}
 
 	public Question getQuestion() {
@@ -88,12 +117,12 @@ public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 	}
 
 	protected void clearValues() {
+		question = new Question();
 		question.setQuestion(null);
-		question.setType(new Integer(0));
-		question.setLevel(new Integer(0));
+		question.setType(Question.TYPE_MCQ);
+		question.setLevel(Question.LEVEL_EASY);
 		question.setHint(null);
 		question.setReference(null);
-
 	}	
 	
 	public HtmlDataTable getTblAnswers() {
@@ -136,12 +165,12 @@ public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 		this.refInputTextArea = refInputTextArea;
 	}
 
-	public HtmlInputTextarea getAnswrInputTextArea() {
-		return answrInputTextArea;
+	public HtmlInputTextarea getAnswerInputTextArea() {
+		return answerInputTextArea;
 	}
 
-	public void setAnswrInputTextArea(HtmlInputTextarea answrInputTextArea) {
-		this.answrInputTextArea = answrInputTextArea;
+	public void setAnswerInputTextArea(HtmlInputTextarea answerInputTextArea) {
+		this.answerInputTextArea = answerInputTextArea;
 	}
 
 	public HtmlSelectOneMenu getTypeSelectOneMenu() {
@@ -160,22 +189,9 @@ public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 		this.levelSelectOneMenu = levelSelectOneMenu;
 	}
 
-	public HtmlSelectBooleanCheckbox getCorrectSelectBooleanCheckbox() {
-		return correctSelectBooleanCheckbox;
-	}
-
-	public void setCorrectSelectBooleanCheckbox(
-			HtmlSelectBooleanCheckbox correctSelectBooleanCheckbox) {
-		this.correctSelectBooleanCheckbox = correctSelectBooleanCheckbox;
-	}
-
 	public List<Answer> getAnswerList() {
 		return answerList;
 	}
-
-	public void setAnswerList(List<Answer> answerList) {
-		this.answerList = answerList;
-	}	
 	
 	public Answer getAnswer() {
 		return answer;
@@ -199,5 +215,93 @@ public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 
 	public void setRemoveAnswerConfirmVisible(boolean removeAnswerConfirmVisible) {
 		this.removeAnswerConfirmVisible = removeAnswerConfirmVisible;
+	}
+	
+	private boolean validateAnswerInput() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("QuestionManagedBean - validateAnswerInput: {}", answerInput);
+		}
+		if (answerInput == null || answerInput.trim().length() == 0) {
+			JSFUtils.addFacesErrorMessage(answerInputTextArea, UIInput.REQUIRED_MESSAGE_ID);
+			ICEfacesUtils.setFocus(answerInputTextArea);
+			return false;
+		}
+		for (Answer answer : answerList) {
+			if (answerInput.equals(answer.getAnswer())) {
+				JSFUtils.addFacesErrorMessage(answerInputTextArea, "question.answers.duplicate.message");
+				ICEfacesUtils.setFocus(answerInputTextArea);
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Add an Answer
+	 */
+	public void addAnswer(ActionEvent event) {
+		if (!validateAnswerInput()) {
+			return;
+		}
+		Answer newAnswer = new Answer();
+		newAnswer.setAnswer(answerInput);
+		answerList.add(newAnswer);
+		answerInput = null;
+		ICEfacesUtils.setFocus(answerInputTextArea);
+		answerInputTextArea.resetValue();
+	}
+	
+	public void editAnswerAction() {
+		answer = (Answer) tblAnswers.getRowData();
+		answerInput = answer.getAnswer();
+		answerInputTextArea.resetValue();
+		updateAnswer = true;
+	}
+	
+	public void editAnswer(ActionEvent event) {
+		if (!validateAnswerInput()) {
+			return;
+		}
+		answer.setAnswer(answerInput);
+		answerInput = null;
+		answerInputTextArea.resetValue();
+		ICEfacesUtils.setFocus(answerInputTextArea);
+		updateAnswer = false;
+	}
+	
+	public void cancelAnswerInput(ActionEvent event) {
+		answerInput = null;
+		answerInputTextArea.resetValue();
+		ICEfacesUtils.setFocus(answerInputTextArea);
+		updateAnswer = false;
+	}
+
+	public void removeAnswerConfirmActionListener(ActionEvent event) {
+		this.answer = (Answer) tblAnswers.getRowData();
+		removeAnswerConfirmVisible = this.answer != null;
+		if (removeAnswerConfirmVisible) {
+			if (logger.isDebugEnabled()) {
+				logger.debug("Going to remove: {}", this.answer);
+			}
+		}
+	}
+	public void removeAnswerActionListener(ActionEvent event) {
+		if (this.answer == null) {
+			return;
+		}
+		this.answerList.remove(this.answer);
+		removeAnswerConfirmVisible = false;
+	}
+	
+	public void closeRemoveAnswerActionListener(ActionEvent event) {
+		removeAnswerConfirmVisible = false;
+	}
+
+	public String getAnswerInput() {
+		return answerInput;
+	}
+
+	public void setAnswerInput(String answerInput) {
+		this.answerInput = answerInput;
 	}
 }

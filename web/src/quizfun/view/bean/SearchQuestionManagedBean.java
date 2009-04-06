@@ -30,6 +30,7 @@ import quizfun.model.dto.ModuleSCDO;
 import quizfun.model.dto.QuestionSCDO;
 import quizfun.model.entity.Module;
 import quizfun.model.entity.Question;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -78,8 +79,6 @@ public class SearchQuestionManagedBean extends QuestionManagedBean{
 			public void getFilterStrings(List<String> baseList, Question question) {
 				baseList.add(String.valueOf(question.getId()));
 				baseList.add(question.getQuestion());
-				baseList.add(String.valueOf(question.getLevel()));
-				baseList.add(String.valueOf(question.getType()));
 				baseList.add(question.getModule().getCode());
 				baseList.add(question.getModule().getName());
 			}
@@ -149,7 +148,7 @@ public class SearchQuestionManagedBean extends QuestionManagedBean{
 			} else {
 				questionMatcherEditor = new TextMatcherEditor<Question>(questionFilterator);
 				filterList = new FilterList<Question>(GlazedLists.eventList(questions), questionMatcherEditor);
-				filterInputText.requestFocus();
+				ICEfacesUtils.setFocus(filterInputText);
 			}
 		} catch (Throwable e) {
 			logger.error("Exception when finding question: " + questionSCDO, e);
@@ -163,14 +162,14 @@ public class SearchQuestionManagedBean extends QuestionManagedBean{
 		if (filterList == null || filterList.isEmpty()) {
 			JSFUtils.addFacesInfoMessage(filterInputText, "common.filter.empty");
 		}
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	public void filterClearActionListener(ActionEvent event) {
 		filterText = null;
 		filterList();
 		filterInputText.resetValue();
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	private void filterList() {

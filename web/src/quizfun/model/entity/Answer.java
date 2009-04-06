@@ -37,6 +37,10 @@ public class Answer implements Serializable, Auditable {
 	private Date createdDate;
 	private String modifiedBy;
 	private Date modifiedDate;
+	
+	public Answer() {
+		
+	}
 
 	public Long getId() {
 		return id;
@@ -114,7 +118,6 @@ public class Answer implements Serializable, Auditable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((getAnswer() == null) ? 0 : getAnswer().hashCode());
-		result = prime * result + (isCorrect() ? 1231 : 1237);
 		return result;
 	}
 
@@ -131,8 +134,6 @@ public class Answer implements Serializable, Auditable {
 			if (other.getAnswer() != null)
 				return false;
 		} else if (!getAnswer().equals(other.getAnswer()))
-			return false;
-		if (isCorrect() != other.isCorrect())
 			return false;
 		return true;
 	}

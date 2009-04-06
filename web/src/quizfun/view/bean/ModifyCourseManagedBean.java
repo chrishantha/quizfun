@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Course;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -56,7 +57,7 @@ public class ModifyCourseManagedBean extends CourseManagedBean {
 			}
 			JSFUtils.storeOnRequestMap("course", modifyingCourse);
 			JSFUtils.addFacesInfoMessage("course.save.successful");
-			codeInputText.requestFocus();
+			ICEfacesUtils.setFocus(codeInputText);
 		} catch (Throwable e) {
 			logger.error("Exception when saving course: " + course, e);
 			JSFUtils.addApplicationErrorMessage();
@@ -70,6 +71,6 @@ public class ModifyCourseManagedBean extends CourseManagedBean {
 
 		codeInputText.resetValue();
 		nameInputText.resetValue();
-		codeInputText.requestFocus();
+		ICEfacesUtils.setFocus(codeInputText);
 	}
 }

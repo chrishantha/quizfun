@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.User;
 import quizfun.model.exception.DuplicateUserException;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -61,7 +62,7 @@ public class CreateUserManagedBean extends UserManagedBean {
 			serviceLocator.getUserService().saveUser(user);
 			clearValues();
 			JSFUtils.addFacesInfoMessage("user.save.successful");
-			userNameInputText.requestFocus();
+			ICEfacesUtils.setFocus(userNameInputText);
 		} catch (DuplicateUserException e) {
 			JSFUtils.addFacesErrorMessage("user.save.duplicate", new Object[] { user.getUsername() });
 			return;

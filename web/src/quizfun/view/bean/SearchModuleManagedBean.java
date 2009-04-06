@@ -30,6 +30,7 @@ import quizfun.model.dto.CourseSCDO;
 import quizfun.model.dto.ModuleSCDO;
 import quizfun.model.entity.Course;
 import quizfun.model.entity.Module;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 import ca.odell.glazedlists.FilterList;
 import ca.odell.glazedlists.GlazedLists;
@@ -160,7 +161,7 @@ public class SearchModuleManagedBean extends ModuleManagedBean {
 			} else {
 				moduleMatcherEditor = new TextMatcherEditor<Module>(moduleFilterator);
 				filterList = new FilterList<Module>(GlazedLists.eventList(modules), moduleMatcherEditor);
-				filterInputText.requestFocus();
+				ICEfacesUtils.setFocus(filterInputText);
 			}
 		} catch (Throwable e) {
 			logger.error("Exception when finding module: " + moduleSCDO, e);
@@ -174,14 +175,14 @@ public class SearchModuleManagedBean extends ModuleManagedBean {
 		if (filterList == null || filterList.isEmpty()) {
 			JSFUtils.addFacesInfoMessage(filterInputText, "common.filter.empty");
 		}
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	public void filterClearActionListener(ActionEvent event) {
 		filterText = null;
 		filterList();
 		filterInputText.resetValue();
-		filterInputText.requestFocus();
+		ICEfacesUtils.setFocus(filterInputText);
 	}
 
 	private void filterList() {

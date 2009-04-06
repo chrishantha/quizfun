@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	xmlns:ice="http://www.icesoft.com/icefaces/component"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
-	<ice:panelGrid id="pnlConf1" width="100%" columns="2"
+	<ice:panelGrid id="pnlQuestion" width="100%" columns="2"
 		columnClasses="pnlGrdTwoColumnFormLabel,pnlGrdTwoColumnFormField">
 
 		<!-- Question -->
@@ -34,38 +34,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<ice:inputTextarea id="txtaQues"
 				value="#{managedBean.question.question}" required="#{required}"
 				binding="#{managedBean.quesInputTextArea}"
-				maxlength="#{res['question.question.maxlength']}"
 				partialSubmit="true">
+				<f:validateLength maximum="#{res['question.question.maxlength']}"></f:validateLength>
 			</ice:inputTextarea>
 			<ice:message for="txtaQues" />
 		</ice:panelGroup>
 
 		<!-- Question Type-->
 		<ice:outputLabel id="lblType" value="#{res['question.type.label']}"
-			for="txtaQues" styleClass="#{required ? 'lblRequired' : 'lblCommon'}">
+			for="mnuType" styleClass="#{required ? 'lblRequired' : 'lblCommon'}">
 		</ice:outputLabel>
 		<ice:panelGroup>
-			<ice:selectOneMenu id="slctomType"
+			<ice:selectOneMenu id="mnuType"
 				value="#{managedBean.question.type}" required="#{required}"
 				binding="#{managedBean.typeSelectOneMenu}" partialSubmit="true">
 				<f:selectItem itemLabel="#{res['question.select.label.mcq']}" itemValue="#{res['question.select.value.mcq']}" />
 			</ice:selectOneMenu>
-			<ice:message for="slctomType" />
+			<ice:message for="mnuType" />
 		</ice:panelGroup>
 
 		<!-- Question Level-->
 		<ice:outputLabel id="lblLevel" value="#{res['question.level.label']}"
-			for="txtaQues" styleClass="#{required ? 'lblRequired' : 'lblCommon'}">
+			for="mnuLevel" styleClass="#{required ? 'lblRequired' : 'lblCommon'}">
 		</ice:outputLabel>
 		<ice:panelGroup>
-			<ice:selectOneMenu id="slctomLevel"
+			<ice:selectOneMenu id="mnuLevel"
 				value="#{managedBean.question.level}" required="#{required}"
 				binding="#{managedBean.levelSelectOneMenu}" partialSubmit="true">
 				<f:selectItem itemLabel="#{res['question.select.label.easy']}" itemValue="#{res['question.select.value.easy']}" />
 				<f:selectItem itemLabel="#{res['question.select.label.medium']}" itemValue="#{res['question.select.value.medium']}" />
 				<f:selectItem itemLabel="#{res['question.select.label.hard']}" itemValue="#{res['question.select.value.hard']}" />
 			</ice:selectOneMenu>
-			<ice:message for="slctomLevel" />
+			<ice:message for="mnuLevel" />
 		</ice:panelGroup>
 
 		<!-- Hint -->
@@ -74,8 +74,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		</ice:outputLabel>
 		<ice:panelGroup>
 			<ice:inputTextarea id="txtaHint" value="#{managedBean.question.hint}"
-				binding="#{managedBean.hintInputTextArea}"
-				maxlength="#{res['question.hint.maxlength']}" partialSubmit="true">
+				binding="#{managedBean.hintInputTextArea}" partialSubmit="true">
+				<f:validateLength maximum="#{res['question.hint.maxlength']}"></f:validateLength>
 			</ice:inputTextarea>
 			<ice:message for="txtaHint" />
 		</ice:panelGroup>
@@ -89,8 +89,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<ice:inputTextarea id="txtaRef"
 				value="#{managedBean.question.reference}" 
 				binding="#{managedBean.refInputTextArea}"
-				maxlength="#{res['question.reference.maxlength']}"
 				partialSubmit="true">
+				<f:validateLength maximum="#{res['question.reference.maxlength']}"></f:validateLength>
 			</ice:inputTextarea>
 			<ice:message for="txtaRef" />
 		</ice:panelGroup>

@@ -26,6 +26,12 @@ import java.util.Set;
 public class Question implements Serializable, Auditable {
 
 	private static final long serialVersionUID = 6831395193559009788L;
+	
+	public static final int LEVEL_EASY = 1;
+	public static final int LEVEL_MEDIUM = 2;
+	public static final int LEVEL_HARD = 3;
+	
+	public static final int TYPE_MCQ = 1;
 
 	private Long id;
 	private String question;
@@ -155,7 +161,7 @@ public class Question implements Serializable, Auditable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + getLevel();
-		result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+		result = prime * result + ((getQuestion() == null) ? 0 : getQuestion().hashCode());
 		result = prime * result + getType();
 		return result;
 	}

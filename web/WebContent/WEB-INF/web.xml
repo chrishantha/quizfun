@@ -18,8 +18,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
-<web-app>
+<web-app version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>QuizFun</display-name>
 	<context-param>
 		<param-name>javax.faces.CONFIG_FILES</param-name>
@@ -38,9 +40,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<param-value>false</param-value>
 	</context-param>
 	<context-param>
+		<param-name>com.icesoft.faces.concurrentDOMViews</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>com.icesoft.faces.doJSFStateManagement</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>com.icesoft.faces.blockUIOnSubmit</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/applicationContext*.xml</param-value>
-		<description>Spring context configuration files</description>
 	</context-param>
 	<context-param>
 		<param-name>quizfun.USE_PROXY</param-name>
@@ -48,7 +61,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	</context-param>
 	<context-param>
 		<param-name>quizfun.PROXY_HOST_NAME</param-name>
-		<param-value>192.168.10.18</param-value>
+		<param-value>192.168.1.16</param-value>
 	</context-param>
 	<context-param>
 		<param-name>quizfun.PROXY_PORT</param-name>

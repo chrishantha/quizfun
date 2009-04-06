@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import quizfun.model.entity.Module;
 import quizfun.model.exception.DuplicateModuleException;
+import quizfun.view.util.ICEfacesUtils;
 import quizfun.view.util.JSFUtils;
 
 /**
@@ -44,7 +45,7 @@ public class CreateModuleManagedBean extends ModuleManagedBean {
 	public void saveActionListener(ActionEvent event) {
 		if (course == null) {
 			JSFUtils.addFacesErrorMessage("selectcourse.course.required.message");
-			courseSelectInputText.requestFocus();
+			ICEfacesUtils.setFocus(courseSelectInputText);
 			return;
 		}
 		
@@ -53,7 +54,7 @@ public class CreateModuleManagedBean extends ModuleManagedBean {
 			serviceLocator.getModuleService().saveModule(module);
 			clearValues();
 			JSFUtils.addFacesInfoMessage("module.save.successful");
-			codeInputText.requestFocus();
+			ICEfacesUtils.setFocus(codeInputText);
 		} catch (DuplicateModuleException e) {
 			JSFUtils.addFacesErrorMessage("module.save.duplicate", new Object[] { module.getCode() });
 			return;

@@ -55,8 +55,7 @@ public class PlayGameManagedBean {
 
 	HtmlOutputText idOutputText;
 
-	@SuppressWarnings("unchecked")
-	private ArrayList colors;
+	private ArrayList<Color> colors;
 	
 	@SuppressWarnings("unchecked")
 	@javax.annotation.PostConstruct
@@ -118,6 +117,7 @@ public class PlayGameManagedBean {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public GameDTO generatingChart(Question ques, GameDTO gameDTO) {
 		//Setting Answers
 		gameDTO.setLabels(new ArrayList<String>());
@@ -205,10 +205,10 @@ public class PlayGameManagedBean {
 	public void setQuesList(List<Question> quesList) {
 		this.quesList = quesList;
 	}
-	public ArrayList getColors() {
+	public ArrayList<Color> getColors() {
 		return colors;
 	}
-	public void setColors(ArrayList colors) {
+	public void setColors(ArrayList<Color> colors) {
 		this.colors = colors;
 	}
 	public List<Answer> getAnsList() {

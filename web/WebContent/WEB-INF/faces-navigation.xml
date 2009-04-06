@@ -32,6 +32,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<redirect />
 		</navigation-case>
 		<navigation-case>
+			<from-outcome>about</from-outcome>
+			<to-view-id>/about.iface</to-view-id>
+			<redirect />
+		</navigation-case>
+		<navigation-case>
 			<from-outcome>registerUser</from-outcome>
 			<to-view-id>/pages/user/register.iface</to-view-id>
 			<redirect />

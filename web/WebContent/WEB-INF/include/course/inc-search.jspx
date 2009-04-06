@@ -159,9 +159,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					</ice:outputFormat>
 					<ice:panelGroup style="text-align: center;">
 						<ice:commandButton id="btnYes" actionListener="#{searchCourse.removeActionListener}"
-							value="#{res['common.label.yes']}" style="padding: 2px 5px 2px 5px;" />
+							value="#{res['common.label.yes']}" styleClass="popupConfirmButton" />
 						<ice:commandButton id="btnNo" immediate="true" actionListener="#{searchCourse.closeRemoveActionListener}"
-							value="#{res['common.label.no']}" style="padding: 2px 5px 2px 5px;" />
+							value="#{res['common.label.no']}" styleClass="popupConfirmButton" />
 					</ice:panelGroup>
 				</ice:panelGroup>
 			</f:facet>

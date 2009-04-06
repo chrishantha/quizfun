@@ -53,8 +53,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				<ui:param name="managedBean" value="#{modifyQuestion}" />
 			</ui:decorate>
 		</ice:panelCollapsible>
+	<!-- 
 	</ice:form>
 	<ice:form id="frmAnswer">
+	 -->
 		<ice:panelCollapsible id="pncAnswer" expanded="true"
 			toggleOnClick="false">
 			<f:facet name="header">
@@ -95,16 +97,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 				<ice:panelGroup styleClass="popupBody">
 					<ice:outputFormat value="#{res['answer.remove.confirm.text']}"
 						style="display: block; padding: 5px 10px 15px 10px;">
+						<f:param value="#{modifyQuestion.answer.answer}" />
 					</ice:outputFormat>
 					<ice:panelGroup style="text-align: center;">
 						<ice:commandButton id="btnYes"
 							actionListener="#{modifyQuestion.removeAnswerActionListener}"
 							value="#{res['common.label.yes']}"
-							style="padding: 2px 5px 2px 5px;" />
+							styleClass="popupConfirmButton" />
 						<ice:commandButton id="btnNo" immediate="true"
 							actionListener="#{modifyQuestion.closeRemoveAnswerActionListener}"
 							value="#{res['common.label.no']}"
-							style="padding: 2px 5px 2px 5px;" />
+							styleClass="popupConfirmButton" />
 					</ice:panelGroup>
 				</ice:panelGroup>
 			</f:facet>
