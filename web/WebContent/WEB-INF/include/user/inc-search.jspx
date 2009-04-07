@@ -132,7 +132,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					<f:facet name="header">
 						<ice:outputText	value="#{res['user.table.column.coursecode.header']}"></ice:outputText>
 					</f:facet>
-					<ice:outputText value="#{user.course.name}"></ice:outputText>
+					<ice:outputText value="#{user.course.code}"></ice:outputText>
 				</ice:column>
 				
 				<ice:column id="coursename" style="width: 20%">
