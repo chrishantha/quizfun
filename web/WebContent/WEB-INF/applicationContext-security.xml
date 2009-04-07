@@ -42,12 +42,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<anonymous username="guest" />
 		<logout/>
 		<openid-login login-page="/login.iface" authentication-failure-url="/login.iface?login_error=true" />
+	    <port-mappings>
+			<port-mapping http="80" https="443" />
+    	</port-mappings>
 	</http>
 
+	<!-- 
 	<authentication-provider user-service-ref="userDetailsService" />
+	 -->
+	 
+	<beans:bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+		<beans:property name="providers">
+			<beans:list>
+				<beans:ref local="openIDAuthenticationProvider" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="openIDAuthenticationProvider" class="org.springframework.security.providers.openid.OpenIDAuthenticationProvider">
+		<beans:property name="userDetailsService" ref="userDetailsService" />
+	</beans:bean>
 
 	<beans:bean id="userDetailsService" class="quizfun.model.service.UserDetailsServiceImpl">
 		<beans:property name="userService" ref="userService" />
 	</beans:bean>
+	
+	<beans:bean id="openIdFilter" class="org.springframework.security.ui.openid.OpenIDAuthenticationProcessingFilter">
+        <custom-filter position="AUTHENTICATION_PROCESSING_FILTER"/>
+        <beans:property name="authenticationManager" ref="authenticationManager"/>
+        <beans:property name="defaultTargetUrl" value="/index.jsp"/>
+        <beans:property name="authenticationFailureUrl" value="/login.iface?login_error=true"/>
+        <beans:property name="allowSessionCreation" value="true"/>
+        <!-- the realmMapping property allows mapping through apache's mod proxy -->
+        <beans:property name="realmMapping">
+            <beans:map>
+                <beans:entry key="https://localhost/QuizFun/j_spring_openid_security_check"
+                         value="https://localhost/QuizFun/j_spring_openid_security_check"/>
+            </beans:map>
+        </beans:property>
+    </beans:bean> 
 </beans:beans>
 
