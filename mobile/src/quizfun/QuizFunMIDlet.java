@@ -34,8 +34,10 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.Gauge;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.List;
+import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
 import javax.microedition.midlet.*;
 import javax.microedition.rms.RecordStore;
@@ -185,6 +187,11 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      */
     private Form questionForm;
     /**
+     * Question <code>StringItem</code> for
+     * displaying question
+     */
+    private StringItem questionStringItem;
+    /**
      * Answers
      */
     private ChoiceGroup answerCg;
@@ -197,6 +204,10 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      * Current Question displayed
      */
     private Question currentQuestion;
+    /**
+     * Maximum marks
+     */
+    private final int MAX_MARKS = 100;
     /**
      * Happy Alerts
      */
@@ -442,6 +453,7 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
                     message = messages[random.nextInt(messages.length)];
                     alert.setString(message + "\n\nCorrect answer is '" + correctAnswer.getAnswer() + "'\n" + getMarksString());
                 }
+                alert.getIndicator().setValue(marks);
 
                 if (questionEnumeration.hasMoreElements()) {
                     setQuestionDisplay();
@@ -779,6 +791,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      */
     public Alert[] getHappyAlerts() {
         if (happyAlerts == null) {
+            Gauge alertGauge;
+
             happyAlerts = new Alert[3];
             String title = "Correct!";
             String alertText = "";
@@ -791,6 +805,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             Alert alert = new Alert(title, alertText, image, AlertType.INFO);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             happyAlerts[0] = alert;
 
             image = null;
@@ -801,6 +817,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.INFO);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             happyAlerts[1] = alert;
 
             image = null;
@@ -811,6 +829,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.INFO);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             happyAlerts[2] = alert;
         }
         return happyAlerts;
@@ -822,6 +842,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
      */
     public Alert[] getSadAlerts() {
         if (sadAlerts == null) {
+            Gauge alertGauge;
+            
             sadAlerts = new Alert[6];
             String title = "Wrong!!";
             String alertText = "";
@@ -834,6 +856,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             Alert alert = new Alert(title, alertText, image, AlertType.WARNING);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             sadAlerts[0] = alert;
 
             image = null;
@@ -844,6 +868,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.WARNING);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             sadAlerts[1] = alert;
 
             image = null;
@@ -854,6 +880,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.WARNING);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             sadAlerts[2] = alert;
 
             image = null;
@@ -864,6 +892,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.WARNING);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             sadAlerts[3] = alert;
 
             image = null;
@@ -874,6 +904,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.WARNING);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             sadAlerts[4] = alert;
 
             image = null;
@@ -884,6 +916,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
             }
             alert = new Alert(title, alertText, image, AlertType.WARNING);
             alert.setTimeout(Alert.FOREVER);
+            alertGauge = new Gauge(null, false, MAX_MARKS, 1);
+            alert.setIndicator(alertGauge);
             sadAlerts[5] = alert;
         }
         return sadAlerts;
@@ -970,8 +1004,11 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
     public Form getQuestionForm() {
         if (questionForm == null) {
             questionForm = new Form("");
+            questionStringItem = new StringItem("", "");
             // Create an exclusive (radio) choice group
             answerCg = new ChoiceGroup("", Choice.EXCLUSIVE);
+            answerCg.setFitPolicy(Choice.TEXT_WRAP_ON);
+            questionForm.append(questionStringItem);
             questionForm.append(answerCg);
             questionForm.addCommand(getExitCommand());
             questionForm.addCommand(getDoneCommand());
@@ -1015,7 +1052,8 @@ public class QuizFunMIDlet extends MIDlet implements CommandListener {
         // Assuming that questionEnumeration, questionItem and answerCg is initialized.
         currentQuestion = (Question) questionEnumeration.nextElement();
         Vector answers = currentQuestion.getAnswers();
-        answerCg.setLabel(currentQuestion.getQuestion());
+        questionStringItem.setText(currentQuestion.getQuestion());
+        //answerCg.setLabel(currentQuestion.getQuestion());
         answerCg.deleteAll();
         Enumeration enumeration = answers.elements();
         while (enumeration.hasMoreElements()) {
