@@ -118,7 +118,45 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 					<f:facet name="header">
 						<ice:outputText	value="#{res['question.table.column.question.header']}"></ice:outputText>
 					</f:facet>
-					<ice:outputText value="#{question.question}"></ice:outputText>
+					<ice:panelGroup id="pngQuestion" style="display:inline; cursor: help;" panelTooltip="pnlAnswerPanelToolTip">
+						<ice:outputText value="#{question.question}"></ice:outputText>
+					</ice:panelGroup>
+
+					<ice:panelTooltip id="pnlAnswerPanelToolTip"
+						hideOn="mouseout"
+						hoverDelay="1000"
+						style="text-align:left;width:250px;">
+						<f:facet name="header">
+						</f:facet>
+						<f:facet name="body">
+							<ice:panelGroup id="pngToolTip">
+								<ice:dataTable id="dtbAnswers" var="answer" width="100%"
+								    value="#{question.answers}"
+									rendered="true">
+					
+									<ice:column id="colAnswer" style="width: 60%">
+										<f:facet name="header">
+											<ice:outputText	value="#{res['question.answer.label.answer']}"></ice:outputText>
+										</f:facet>
+										<ice:panelGroup contextValue="text">
+											<ice:outputText value="#{answer.answer}" />
+										</ice:panelGroup>
+									</ice:column>
+					
+									<ice:column id="colCorrect" style="width: 20%">
+										<f:facet name="header">
+											<ice:outputText	value="#{res['question.answer.label.correct']}"></ice:outputText>
+										</f:facet>
+										<ice:panelGroup contextValue="text">
+											<ice:selectBooleanCheckbox id="chkCorrect" value="#{answer.correct}"
+												disabled="true" >
+											</ice:selectBooleanCheckbox>
+										</ice:panelGroup>
+									</ice:column>					
+								</ice:dataTable>
+							</ice:panelGroup>
+						</f:facet>
+					</ice:panelTooltip>
 				</ice:column>
 
 				<ice:column id="level" style="width: 10%">
