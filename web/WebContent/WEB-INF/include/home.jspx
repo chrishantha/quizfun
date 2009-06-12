@@ -19,7 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jstl/core">
 
+	<div id="wrap">
 	<p>Hello!, Thank you for signing in with your OpenID <span style="font-weight: bold; margin-left: 1em;">#{common.username}</span></p>
+	
+
 	
 	<c:if test="#{empty common.user}">
 		<p>It seems that you are not registered with QuizFun to play games.</p>
@@ -30,19 +33,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	</c:if>
 	
 	<c:if test="#{not empty common.user}">
-		<p>You are registered with QuizFun....</p>
+		<p>You are registered with QuizFun to play games!</p>
 	</c:if>
+	
 	<c:if test="#{(not empty common.user) and (not empty common.user.course)}">
 		<p>Your course is <span style="font-weight: bold; margin-left: 1em;">#{common.user.course.name}</span></p>
 	</c:if>
 	
+	<div class="contentbox" style="width: 450px;">
+	<h3 class="contentheader">Download QuizFun</h3>
 	<p>You need to download the QuizFun mobile application to play the game.</p>
+	<p>There are two ways to install the application.</p>
 	
-	<p><a href="http://chrishantha.googlepages.com/QuizFun.jar">http://chrishantha.googlepages.com/QuizFun.jar</a></p>
-	<p><a href="http://chrishantha.googlepages.com/QuizFun.jad">http://chrishantha.googlepages.com/QuizFun.jad</a></p>
+	<p>1. Download the QuizFun.jar file to your PC and then you can transfer the application to the mobile.</p>
+	<p>2. Download the game directly to your mobile device from your mobile microbrowser. Please enter the URL for QuizFun.jad file in your mobile microbrowser.</p>
+	
+	<ice:panelGroup styleClass="downloadLink">
+		<ice:outputLink value="#{facesContext.externalContext.requestContextPath}/application/QuizFun.jad">
+			<ice:outputText value="http://quizfun.servegame.org/QuizFun/application/QuizFun.jad" />
+		</ice:outputLink>
+	</ice:panelGroup>
+	
+	<ice:panelGroup styleClass="downloadLink">
+		<ice:outputLink value="#{facesContext.externalContext.requestContextPath}/application/QuizFun.jar">
+			<ice:outputText value="http://quizfun.servegame.org/QuizFun/application/QuizFun.jar" />
+		</ice:outputLink>
+	</ice:panelGroup>
 	
 	<p>Please read the guide before playing.....</p>
 	
-	<p><a href="http://chrishantha.googlepages.com/QuizFun_Guide.pdf">http://chrishantha.googlepages.com/QuizFun_Guide.pdf</a></p>
+	<ice:panelGroup styleClass="downloadLink">
+		<ice:outputLink value="http://chrishantha.googlepages.com/QuizFun_Guide.pdf">
+			<ice:outputText value="http://chrishantha.googlepages.com/QuizFun_Guide.pdf" />
+		</ice:outputLink>
+	</ice:panelGroup>
+	</div>
 	
+
+	</div>
+
 </div>

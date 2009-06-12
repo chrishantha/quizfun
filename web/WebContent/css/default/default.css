@@ -322,7 +322,7 @@ div.clearer {
 /* Data Paginator Styles - End */
 
 /* Command Link Action Styles - Start */
-.removeRecord, .editRecord {
+.removeRecord, .editRecord, .downloadLink {
 	background-repeat: no-repeat;
 	background-position: center left;
 	margin-right: 5px;
@@ -334,6 +334,9 @@ div.clearer {
 }
 .editRecord {
     background-image: url( './css-images/page_edit.gif' );
+}
+.downloadLink {
+    background-image: url( './css-images/icon_download.gif' );
 }
 /* Command Link Action Styles - End */
 
@@ -419,3 +422,11 @@ div.clearer {
     color: black;
 }
 /* Panel Series - End  */
+
+/* Box */
+div.homepagebox { 
+  border: 2px solid;
+  padding: 30px;
+  background: #D3DFF8;
+  width: 400px;
+}
