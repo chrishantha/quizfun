@@ -19,8 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:ui="http://java.sun.com/jsf/facelets" class="headerContainer">
 
+<!-- 
 <form id="frmLogout" action="#{facesContext.externalContext.requestContextPath}/j_spring_security_logout" method="POST">
 </form>
+ -->
 <ice:form id="frmH">
 	<!-- Header -->
 	<div id="header">
@@ -33,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			<ice:outputText value="#{res['login.welcome.message']}" style="color: #FFFFFF;" />
 			<ice:commandLink value="#{common.username}" action="#{common.editAction}" style="color: #FFFFFF; text-decoration: underline;" rendered="#{not empty common.user}" />
 			<ice:outputText value="#{common.username}" style="color: #FFFFFF;" rendered="#{empty common.user}" />
-			<ice:outputLink value="javaScript:void(0);" onclick="document.getElementById('frmLogout').submit();">
+			<ice:outputLink value="javaScript:void(0);" onclick="window.location = '#{facesContext.externalContext.requestContextPath}/j_spring_security_logout';">
 				 <ice:outputText value="#{res['common.logout.label']}" style="color: #FFFFFF; text-decoration: underline;"/>
 			</ice:outputLink>
 		</ice:panelGroup>
