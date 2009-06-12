@@ -19,7 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jstl/core">
 
-	<p>Developers: Isuru, Hiranya, Nevindaree and Madura</p>
+	<p>Developers: M. Isuru Tharanga Chrishantha Perera, Hiranya Mudunkotuwa, Nevindaree Premarathne and Madura Kularathna</p>
 	
-	<p>Any questions? Please contact the administrator. chrishantha at gmail dot com</p>
+	<p>Any questions? Please contact the administrator.</p>
+	<p><a href="mailto:chrishantha@gmail.com">chrishantha@gmail.com</a></p>
 </div>
