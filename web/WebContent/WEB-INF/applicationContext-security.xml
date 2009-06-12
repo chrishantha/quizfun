@@ -32,6 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<intercept-url pattern="/user/register.iface" access="ROLE_USER" requires-channel="https" />
 		<intercept-url pattern="/user/settings.iface" access="ROLE_USER" requires-channel="https" />
 		 -->
+		 
+		<!-- Using https is difficult as there is no valid certificate. Switching to http mode
 		<intercept-url pattern="/css/**" filters="none" requires-channel="https" />
 		<intercept-url pattern="/xmlhttp/**" access="ROLE_ANONYMOUS,ROLE_USER" requires-channel="https" />
 		<intercept-url pattern="/block/**" access="ROLE_ANONYMOUS,ROLE_USER" requires-channel="https" />
@@ -39,6 +41,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<intercept-url pattern="/about**" access="ROLE_ANONYMOUS,ROLE_USER" />
 		<intercept-url pattern="/login.iface*" access="ROLE_ANONYMOUS" requires-channel="https" />
 		<intercept-url pattern="/**" access="ROLE_USER" requires-channel="https" />
+		 -->
+		<intercept-url pattern="/css/**" filters="none" requires-channel="http" />
+		<intercept-url pattern="/xmlhttp/**" access="ROLE_ANONYMOUS,ROLE_USER" requires-channel="http" />
+		<intercept-url pattern="/block/**" access="ROLE_ANONYMOUS,ROLE_USER" requires-channel="http" />
+		<intercept-url pattern="/m/**" access="ROLE_ANONYMOUS" requires-channel="http" />
+		<intercept-url pattern="/about**" access="ROLE_ANONYMOUS,ROLE_USER" />
+		<intercept-url pattern="/login.iface*" access="ROLE_ANONYMOUS" requires-channel="http" />
+		<intercept-url pattern="/**" access="ROLE_USER" requires-channel="http" />
+		
 		<anonymous username="guest" />
 		<logout/>
 		<openid-login login-page="/login.iface" authentication-failure-url="/login.iface?login_error=true" />
