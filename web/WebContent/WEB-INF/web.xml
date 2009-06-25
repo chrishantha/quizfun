@@ -57,11 +57,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	</context-param>
 	<context-param>
 		<param-name>quizfun.USE_PROXY</param-name>
-		<param-value>false</param-value>
+		<param-value>true</param-value>
 	</context-param>
 	<context-param>
 		<param-name>quizfun.PROXY_HOST_NAME</param-name>
-		<param-value>192.168.1.16</param-value>
+		<param-value>192.168.1.6</param-value>
 	</context-param>
 	<context-param>
 		<param-name>quizfun.PROXY_PORT</param-name>

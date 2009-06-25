@@ -87,8 +87,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <!-- the realmMapping property allows mapping through apache's mod proxy -->
         <beans:property name="realmMapping">
             <beans:map>
-                <beans:entry key="https://localhost/QuizFun/j_spring_openid_security_check"
-                         value="https://localhost/QuizFun/j_spring_openid_security_check"/>
+                <beans:entry key="http://quizfun.servegame.org:8888/QuizFun/j_spring_openid_security_check"
+                         value="http://quizfun.servegame.org:8888/QuizFun/j_spring_openid_security_check"/>
             </beans:map>
         </beans:property>
     </beans:bean> 

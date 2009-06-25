@@ -247,7 +247,7 @@ public abstract class QuestionManagedBean extends ModuleSelectManagedBean{
 		newAnswer.setAnswer(answerInput);
 		answerList.add(newAnswer);
 		answerInput = null;
-		ICEfacesUtils.setFocus(answerInputTextArea);
+		//ICEfacesUtils.setFocus(answerInputTextArea);
 		answerInputTextArea.resetValue();
 	}
 	

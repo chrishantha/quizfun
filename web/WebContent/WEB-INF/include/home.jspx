@@ -47,16 +47,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<p>1. Download the QuizFun.jar file to your PC and then you can transfer the application to the mobile.</p>
 	<p>2. Download the game directly to your mobile device from your mobile microbrowser. Please enter the URL for QuizFun.jad file in your mobile microbrowser.</p>
+	<p>Note: You get the direct URL for downloads from you browser.</p>
 	
 	<ice:panelGroup styleClass="downloadLink">
 		<ice:outputLink value="#{facesContext.externalContext.requestContextPath}/application/QuizFun.jad">
-			<ice:outputText value="http://quizfun.servegame.org/QuizFun/application/QuizFun.jad" />
+			<ice:outputText value="QuizFun.jad" />
 		</ice:outputLink>
 	</ice:panelGroup>
 	
 	<ice:panelGroup styleClass="downloadLink">
 		<ice:outputLink value="#{facesContext.externalContext.requestContextPath}/application/QuizFun.jar">
-			<ice:outputText value="http://quizfun.servegame.org/QuizFun/application/QuizFun.jar" />
+			<ice:outputText value="QuizFun.jar" />
 		</ice:outputLink>
 	</ice:panelGroup>
 	
@@ -64,7 +65,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 	<ice:panelGroup styleClass="downloadLink">
 		<ice:outputLink value="http://chrishantha.googlepages.com/QuizFun_Guide.pdf">
-			<ice:outputText value="http://chrishantha.googlepages.com/QuizFun_Guide.pdf" />
+			<ice:outputText value="QuizFun_Guide.pdf" />
 		</ice:outputLink>
 	</ice:panelGroup>
 	</div>

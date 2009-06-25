@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <div xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jstl/core">
 
-	<p>
+	<div>
 		<div class="contentbox floatright">
 			<h3 class="contentheader">Login with OpenID<a id="openid_help" href="http://openid.net/what" target="_blank" title="OpenID allows you to use a single identity multiple places." style="margin-left: 1em; cursor: help; font-size:85%;">What's this?</a></h3>
 			<form action="j_spring_openid_security_check" method="POST" onsubmit="submitLogin();">
@@ -52,7 +52,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 			</form>
 		</div>
 	
-		Want to play a game? Please login with your OpenID
-	</p>	
+		<p>Want to play a game? Please login with your OpenID</p>
+		<p>We strongly recommend you to login with <a href="http://www.myopenid.com/" style="font-weight: bold; margin-left: 1em;">myOpenID</a></p>
+	</div>
 	
 </div>
