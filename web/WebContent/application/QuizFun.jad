@@ -1,7 +1,7 @@
 Created-By: chrishantha@gmail.com
 MIDlet-1: QuizFun,/quizfun/resources/desktopshare.png,quizfun.QuizFunMIDlet
 MIDlet-Jar-Size: 136352
-MIDlet-Jar-URL: QuizFun.jar
+MIDlet-Jar-URL: http://quizfun.servegame.org:8888/QuizFun/application/QuizFun.jar
 MIDlet-Name: QuizFun
 MIDlet-Permissions: javax.microedition.io.Connector.http
 MIDlet-Vendor: Isuru
